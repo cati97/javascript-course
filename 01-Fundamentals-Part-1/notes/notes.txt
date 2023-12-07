@@ -1,0 +1,2 @@
+1. Is semicolon mandatory in JavaScript?
+No, but it is a good practice.
