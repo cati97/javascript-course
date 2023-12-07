@@ -1,2 +1,16 @@
 1. Is semicolon mandatory in JavaScript?
 No, but it is a good practice.
+
+2. Can I use a dollar sign in a variable name?
+Yes, but it is discouraged.
+
+3. What is Vanilla JavaScript?
+Pure JavaScript, without any framework.
+
+4. When was the biggest JavaScript upgrade?
+In 2015, ECMAScript 6 - ES6.
+
+The biggest upgrade to JavaScript was the introduction of ECMAScript 6 (ES6), 
+also known as ECMAScript 2015. It brought significant enhancements and new features 
+to the language, marking a substantial evolution from ECMAScript 5 (ES5). 
+ECMAScript 6 was finalized in June 2015.
