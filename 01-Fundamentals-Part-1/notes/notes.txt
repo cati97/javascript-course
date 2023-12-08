@@ -14,3 +14,152 @@ The biggest upgrade to JavaScript was the introduction of ECMAScript 6 (ES6),
 also known as ECMAScript 2015. It brought significant enhancements and new features 
 to the language, marking a substantial evolution from ECMAScript 5 (ES5). 
 ECMAScript 6 was finalized in June 2015.
+
+5. What is typeof null?
+
+In JavaScript, the typeof operator is used to determine 
+the type of a variable or an expression. 
+However, when applied to null, it returns the string 'object', 
+which can be a source of confusion. 
+This behavior is considered a historical artifact 
+and is widely regarded as a quirk in the language.
+
+The typeof null returning 'object' is an anomaly in 
+JavaScript that has been preserved for backward compatibility reasons.
+
+Instead use:
+let myVariable = null;
+console.log(myVariable === null);  // Outputs: true
+
+6. What is the difference between undefined and null?
+
+undefined
+ - is automatically assigned when variable was declared but not assigned a value
+ - is automatically returned when function explicitly doesn't return anything
+
+null
+ - explicitly assigned empty value to indicate it shouldn't have any value
+
+In summary, undefined typically represents the absence of an assigned value 
+or an uninitialized variable, while null is often used to 
+signify the intentional absence of an object or a deliberate lack of value. 
+It's worth noting that when checking for the absence of a value or 
+the presence of an object, you may encounter both undefined and null, and sometimes 
+they are used interchangeably based on coding practices and conventions.
+
+7. What are the differences between const let var?
+
+
+var was the original way to declare variables in JavaScript before the introduction of let and const.
+Variables declared with var are function-scoped, meaning their scope is limited to the function they are declared in (or the global scope if declared outside any function).
+Variables declared with var are hoisted, which means they are moved to the top of their scope during the compilation phase.
+
+let was introduced in ECMAScript 6 (ES6) to address some of the issues with var.
+Variables declared with let are block-scoped, meaning their scope is limited to the block (enclosed by curly braces) in which they are defined.
+Variables declared with let are not hoisted to the top of their scope.
+
+const is used to declare constants in JavaScript. Once a value is assigned to a const variable, it cannot be reassigned.
+Like let, variables declared with const are block-scoped.
+Constants must be initialized at the time of declaration.
+
+When deciding which to use, 
+it's generally recommended to use const by default 
+and only use let when you know the variable's value will change. 
+Avoid using var in modern JavaScript, as it has some quirks that can lead to unexpected behavior. 
+Using const helps make your code more predictable and easier to reason about.
+
+8. Can you declare a variable in js without using const let or var?
+
+
+In JavaScript, if you don't use const, let, or var to declare a variable, 
+the variable becomes implicitly global if assigned a value outside of a function or 
+local scope if assigned a value inside a function. This is generally not recommended, 
+as it can lead to unintended consequences and make the code harder to maintain.
+
+// Implicit global variable
+myImplicitGlobal = "Hello, World!";
+
+function exampleFunction() {
+  // Implicit local variable
+  anotherImplicitLocal = "Another variable";
+}
+
+console.log(myImplicitGlobal);  // Outputs: Hello, World!
+console.log(anotherImplicitLocal);  // Outputs: Another variable
+
+In the example above, myImplicitGlobal becomes a global variable because
+it's assigned a value outside of any function. anotherImplicitLocal becomes a local variable 
+for the function exampleFunction because it's assigned a value inside that function.
+
+
+9. How can you console log multiple values?
+
+You can separate values with commas inside the console.log() function.
+
+AS MANY COMMAS as you want.
+
+let value1 = "Hello";
+let value2 = "World";
+let value3 = "Nice";
+
+console.log(value1, value2, value3);
+// Outputs: Hello World
+
+You can concatenate strings or values and then log the result.
+console.log(value1 + " " + value2);
+
+Template Literals (ES6 and newer)
+console.log(`${value1} ${value2}`);
+
+Or in an object form:
+console.log({value1, value2, value3})
+
+10. How to concatenate a string?
+
+In JavaScript, there are multiple ways to concatenate strings, 
+meaning to combine two or more strings into a single string
+
+- Using the + Operator
+let result = str1 + " " + str2;
+- Using the concat() Method:
+let result = str1.concat(" ", str2);
+- Using Template Literals (ES6 and newer):
+let result = `${str1} ${str2}`;
+- Using the += Operator (for appending to an existing string):
+str1 += " " + str2; // instead of str1 = str1 + " " + str2
+
+11. What are some assignments operators?
+
+x+= 5 // x = x + 5
+x*= 5 // x = x * 5
+x++ // x = x + 1
+x-- // x = x - 1
+
+2**3 // 2 to the power of 3 = 8
+
+12. Does the console have access to all declared variables in the code?
+Yes, if we run some script in the browser, the console has access to declared variables in the code.
+
+13. Is javascript a dynamically typed language?
+
+
+Yes, JavaScript is a dynamically typed language. 
+This means that the type of a variable is determined at runtime, not during compilation. 
+In dynamically typed languages, the type of a variable can change during the execution of a program. 
+This is in contrast to statically typed languages, where the variable types are checked at compile-time, 
+and once a variable is declared with a certain type, it cannot change.
+
+In JavaScript, you can assign values of different types to the same variable without 
+explicitly specifying its type.
+
+let myVariable = 42;        // myVariable is a number
+myVariable = "Hello";       // myVariable is now a string
+myVariable = [1, 2, 3];      // myVariable is now an array
+myVariable = { key: "value"};// myVariable is now an object
+
+14. How to declare multiple variables in one line?
+
+Using commas.
+let x, y;
+let x = 10, y = 20, z = 30;
+const firstName = "John", lastName = "Doe", age = 30;
