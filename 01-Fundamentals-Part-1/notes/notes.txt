@@ -163,3 +163,370 @@ Using commas.
 let x, y;
 let x = 10, y = 20, z = 30;
 const firstName = "John", lastName = "Doe", age = 30;
+
+15. How to writer multi line string in js?
+
+using backticks (`) for template literals
+
+let multilineString = `
+    This is a
+    multiline
+    string in JavaScript.
+`;
+
+console.log(multilineString);
+
+It was introduced in 2015 with ES6.
+
+16. What is control structure in js?
+
+In JavaScript, control structures are constructs that enable you to control the flow of your program. 
+The main control structures are:
+
+Conditional Statements:
+if statement: Executes a block of code if a specified condition is true.
+
+Looping Statements:
+
+for loop: Repeats a block of code a specified number of times.
+while loop: Repeats a block of code while a specified condition is true.
+do...while loop: Repeats a block of code while a specified condition is true, and it runs at least once.
+
+Switch Statement:
+switch statement: Allows a program to evaluate an expression and execute code blocks based on the value of that expression.
+
+17. Should I use else if or just if for another condition?
+
+else if  = exclusive conditions! - will enter only the first one matching
+if if if = will enter all that match 
+
+Use else if when you want to check multiple conditions in a sequential manner and execute the first block of code where the condition is true. 
+It is suitable when you have mutually exclusive conditions 
+and only want one block of code to be executed.
+
+On the other hand, use separate if statements if you want to independently check multiple conditions and execute the corresponding blocks of code. 
+This allows for multiple conditions to be true simultaneously.
+
+18. What is typeof NaN?
+NaN (not a number) is in reality an invalid number because typeof NaN is a number.
+
+console.log(typeof NaN); // Output: 'number'
+
+19. How to check if a string after conversion would be a valid number?
+
+Global isNaN function first tries to convert the value to a number and then checks if it is a valid number.
+
+console.log(isNaN("3")); // Output: false
+console.log(isNaN("Hello")); // Output: true
+console.log(isNaN("3.4")); // Output: false
+console.log(isNaN("3,4")); // Output: true 
+
+If you have a comma separated string number you must first do replace(",", ".") and then pass is to isNaN function.
+
+20. Why should I use Number.isNaN and not just isNaN?
+
+The isNaN() function in JavaScript has an interesting behavior that can sometimes lead to unexpected results. 
+The isNaN() function converts its argument to a number before determining whether it is NaN. 
+
+console.log(isNaN("Hello")); // Output: true
+
+string "Hello" is first converted into a number - it produces NaN (which type is a number)
+
+21. When Number.isNaN will return true?
+
+It ONLY returns true if the provided value is exactly equal to NaN!
+
+console.log(Number.isNaN(NaN)); // Output: true
+console.log(Number.isNaN(5));   // Output: false
+console.log(Number.isNaN("Hello")); // Output: false
+console.log(Number.isNaN(undefined)); // Output: false
+console.log(Number.isNaN(null)); // Output: false
+console.log(Number.isNaN("123")); // Output: false
+console.log(Number.isNaN(true)); // Output: false
+
+21. What is the difference between type conversion and coercion?
+
+In summary, type conversion is explicit and intentional, where you, as a programmer, specify the conversion. 
+Type coercion is implicit and happens automatically during operations involving different data types.
+
+let str = "123";
+let num = Number(str); // Type conversion from string to number
+
+let num = 5;
+let str = "2";
+let result = num + str; // Type coercion, string "2" is coerced into a number and added to 5
+
+implicit coercion:
+one string, one number - concatenation "Hello" + 5 = "Hello5"
+two string numbers - concatenation "2" + "4" = "24"
+
+With plus sign - js always converts to string and concatenates - higher precedence
+With other math operators - js converts to a number
+
+"5" * 2 = 10 // implicitly converted string "5" to number 5
+
+2+3+"1" = 5 + "1" = "51"
+
+22. What is better to convert a string to a number Number function or parseInt ?
+
+The Number() function is more versatile and generally preferred when you want a straightforward conversion of a string to a number.
+It can handle both integer and floating-point conversions.
+
+let str = "123";
+let num = Number(str);
+console.log(num); // Output: 123
+
+let floatStr = "123.45";
+let floatNum = Number(floatStr);
+console.log(floatNum); // Output: 123.45
+
+parseInt() is useful when you specifically want to parse an integer from a string.
+Use it when specifically you want to get an integer out of 3.125 or 3
+
+let str = "123";
+let num = parseInt(str);
+console.log(num); // Output: 123
+
+let floatStr = "123.45";
+let floatNum = parseInt(floatStr);
+console.log(floatNum); // Output: 123
+
+Both return NaN, If the string cannot be parsed as a valid number.
+
+23. Which one is better for converting to string: String constructor or toString() method ?
+
+String constructor: Can be used with any value, not just numbers.
+
+let number = 42;
+let stringNumber = String(number);
+console.log(stringNumber); // Output: "42"
+
+let number = 42;
+let stringNumber = number.toString();
+console.log(stringNumber); // Output: "42"
+
+In most cases, the difference is minimal, and it comes down to personal preference and coding style. 
+
+Both don't work with objects! They would return '[object Object]'
+
+In other to convert to a string object use JSON.stringify
+
+JSON.stringify({code: 23})
+'{"code":23}'
+
+and then 
+
+JSON.parse(strObj) to get back the object
+
+24. How args and arguments is different in arrow functions and regular functions?
+
+const calcAvg = (a, b, c) => (a + b + c) / 3;
+
+const calcAvgSpread = (...args) => args.reduce((acc, curr) => acc + curr, 0) / args.length;
+
+function calculateAverage() {
+  console.log(arguments);
+  return [...arguments].reduce((acc, curr) => acc + curr, 0) / arguments.length;
+}
+
+In regular function you can access arguments array-like object without spreading it as parameter. 
+In arrow function you must spread args in parameter. But you can an actual array not object.
+
+25. How to convert arguments object into an array?
+
+By spreading -  [...arguments]
+
+26. Can I use .5 instead of 0.5 to define a number in js?
+
+In JavaScript, starting a numeric literal with a dot is allowed. You can use .5 to represent the number 0.5 without any issues.
+
+var myNumber = .5;
+console.log(myNumber); // Outputs 0.5
+
+27. How to use strict mode in js file?
+"use strict"; at the beginning of the js file for global meaning
+
+or for local:
+function exampleFunction() {
+  "use strict";
+  // This function is in strict mode
+}
+
+28. How to use strict mode in react?
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+ReactDOM.render(
+  <React.StrictMode>
+    {/* Your React app components go here */}
+  </React.StrictMode>,
+  document.getElementById('root')
+);
+
+Remember to REMOVE it in PRODUCTION, as it may log warnings to the console that could be confusing for end-users.
+
+29. What are the differences between a regular function and arrow functions?
+
+Syntax:
+
+Regular Function:
+
+javascript
+Copy code
+function regularFunction(arg1, arg2) {
+  // function body
+}
+Arrow Function:
+
+javascript
+Copy code
+const arrowFunction = (arg1, arg2) => {
+  // function body
+};
+this binding:
+
+Regular Function:
+Has its own this binding, which is dynamically scoped and depends on how the function is called.
+Arrow Function:
+Inherits this from the enclosing scope. It does not have its own this binding, 
+making it especially useful in certain situations, such as when defining functions inside other functions or callbacks.
+Arguments object:
+
+Regular Function:
+
+Has access to the arguments object, which is an array-like object containing all the passed arguments.
+Arrow Function:
+
+Does not have its own arguments object. If you need to access arguments, you would use rest parameters (...args).
+Constructor:
+
+Regular Function:
+
+Can be used as a constructor to create instances of objects.
+Arrow Function:
+
+Cannot be used as a constructor. Attempting to use new with an arrow function will result in an error.
+Binding in Methods:
+
+Regular Function:
+
+Suitable for defining methods within objects, as it automatically binds this to the object.
+Arrow Function:
+
+May not be suitable for object methods because it does not have its own this binding. 
+The value of this will be inherited from the surrounding scope, which may lead to unexpected behavior.
+Return:
+
+Regular Function:
+
+Has an implicit return if no explicit return statement is used.
+Arrow Function:
+
+Requires an explicit return statement if you want to return a value.
+
+Hoisting:
+
+Regular Function:
+
+Function declarations are hoisted, meaning they are moved to the top of their containing scope during the compilation phase. 
+This allows you to call a function before it's defined in the code.
+
+Arrow Function:
+
+Arrow functions are not hoisted in the same way as function declarations. 
+If you try to call an arrow function before its declaration, you'll encounter a reference error.
+
+30. What is the difference in this binding?
+
+Regular Functions:
+
+In a regular function, the value of this is determined by how the function is called.
+If the function is a method of an object, this refers to the object itself.
+javascript
+Copy code
+const obj = {
+  name: 'Example',
+  sayName: function() {
+    console.log(this.name);
+  }
+};
+
+obj.sayName(); // Output: Example
+If a function is not a method but a standalone function, this refers to the global object (which is window in a browser environment).
+javascript
+Copy code
+function standaloneFunction() {
+  console.log(this); // Refers to the global object (e.g., window in a browser)
+}
+
+standaloneFunction();
+
+Arrow Functions:
+
+Arrow functions do not have their own this binding; they inherit this from the enclosing lexical (surrounding) scope.
+
+To sum up - when creating a method inside an object ALWAYS (when you need to access "this") use regular functions not arrow functions since you won't get this reference to the object you are in.
+
+31. Can I define some parameters and then use as last the rest spread args?
+
+Yes, in JavaScript, you can define specific parameters, and then use the rest parameter syntax (...args) to gather the remaining arguments into an array. 
+
+function exampleFunction(param1, param2, ...restArgs) {
+  console.log('param1:', param1);
+  console.log('param2:', param2);
+  console.log('restArgs:', restArgs);
+}
+
+exampleFunction('value1', 'value2', 'value3', 'value4', 'value5');
+
+32. Can I do something similar when declaring a variable?
+
+// Using array destructuring
+const [param1, param2, ...restValues] = ['value1', 'value2', 'value3', 'value4', 'value5'];
+
+// Using object destructuring
+const { prop1, prop2, ...restProps } = { prop1: 'value1', prop2: 'value2', prop3: 'value3' };
+
+console.log('prop1:', prop1);
+console.log('prop2:', prop2);
+console.log('restProps:', restProps);
+
+33. What is the difference between parameter and argument?
+
+A parameter is a variable listed in the function definition. 
+It is a placeholder that represents a value that the function expects to receive when it is called.
+
+An argument is the actual value that is passed to the function when it is called. 
+It corresponds to the parameters defined in the function signature.
+
+34. What is an anonymous function?
+
+An anonymous function in programming is a function that is defined without a name. I
+nstead of being declared with the usual function keyword followed by an identifier (the function name), an anonymous function is created on-the-fly, often as an expression. 
+Anonymous functions are also referred to as function literals or LAMBDA functions.
+
+const add = function(x, y) {
+  return x + y;
+};
+
+In modern JavaScript, arrow functions provide a more concise way to create anonymous functions, especially for simple functions
+
+const add = (x, y) => x + y;
+
+35. What is the meaning of returned -1 value?
+
+In many programming contexts, a return value of -1 typically indicates that a function or operation has encountered an error 
+or that the expected result is not found.
+
+Array and String Indexing:
+
+In the context of functions that search for the position of an element in an array or a character in a string,
+-1 is often used to signify that the element or character is not found.
+
+const array = [1, 2, 3, 4, 5];
+const index = array.indexOf(6);
+
+if (index === -1) {
+  console.log('Element not found.');
+}
