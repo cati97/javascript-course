@@ -1,0 +1,280 @@
+1. How to create an array in js?
+
+Array Literal:
+You can create an array using square brackets and separating the elements with commas:
+var myArray = [1, 2, 3, 4, 5];
+
+
+Array Constructor:
+You can also use the Array constructor to create an array:
+
+var myArray = new Array(1, 2, 3, 4, 5);
+Note: Using the array literal ([]) is generally preferred over the Array constructor.
+
+Empty Array:
+You can create an empty array and later add elements to it:
+
+var myArray = []; // Creates an empty array
+myArray.push(1);   // Adds 1 to the array
+myArray.push(2);   // Adds 2 to the array
+myArray.push(3);   // Adds 3 to the array
+Array with a Specific Length:
+You can create an array with a specific length using the Array constructor and without providing initial values:
+
+var myArray = new Array(5); // Creates an array with length 5, but no initial values
+Note that this array will have a length of 5, but all its elements will be undefined. You can then assign values to specific indices as needed.
+
+Array.from:
+The Array.from() method creates a new, shallow-copied array from an array-like or iterable object:
+
+var myArray = Array.from([1, 2, 3, 4, 5]);
+
+2. Can I mutate the const array?
+
+When it comes to arrays and objects declared with const, it's important to note that the constancy applies to the reference, not the content.
+
+const myArray = [1, 2, 3];
+
+// You can mutate the contents of the array
+myArray.push(4);
+myArray[0] = 0;
+
+console.log(myArray); // Output: [0, 2, 3, 4]
+
+// You cannot reassign the variable to a different array
+// This will result in an error:
+// myArray = [5, 6, 7]; // Error: Assignment to a constant variable
+
+3. Only primitive values are immutable?
+
+Yes, in JavaScript, the term "immutable" typically refers to primitive values (such as numbers, strings, booleans, null, and undefined). 
+Once a primitive value is assigned, its value cannot be changed.
+
+However, when it comes to objects (including arrays and functions), the term "const" behaves differently. 
+When you use const to declare an object, it means the reference to the object is constant, not the contents of the object. The object itself can still be modified.
+
+const myArray = [1, 2, 3];
+myArray.push(4); // This mutates the array
+
+const myObject = { key: 'value' };
+myObject.key = 'new value'; // This mutates the object
+
+// Attempting to reassign the variable will result in an error:
+// myArray = [5, 6, 7]; // Error: Assignment to a constant variable
+// myObject = { newKey: 'newValue' }; // Error: Assignment to a constant variable
+
+4.Can I put a function call in an array? 
+
+Yes, you can absolutely put a function call or a reference to a function in an array in JavaScript. 
+In JavaScript, functions are first-class citizens, which means they can be treated like any other value, such as numbers, strings, or objects. 
+You can store a function reference or the result of a function call in an array just like any other value.
+
+// Define a function
+function greet(name) {
+  return "Hello, " + name + "!";
+}
+
+// Create an array with a function reference
+var myArray = [greet];
+
+// Call the function stored in the array
+console.log(myArray[0]("John")); // Output: Hello, John!
+
+var resultArray = [greet("Alice"), greet("Bob"), greet("Charlie")];
+console.log(resultArray); // Output: ["Hello, Alice!", "Hello, Bob!", "Hello, Charlie!"]
+
+5.What is being returned by push method on an array? 
+
+
+The push method in JavaScript is used to add one or more elements to the end of an array and returns the new length of the array. 
+It mutates the original array by adding elements to its end.
+
+var myArray = [1, 2, 3];
+var newLength = myArray.push(4, 5);
+
+console.log(myArray);   // Output: [1, 2, 3, 4, 5]
+console.log(newLength); // Output: 5 (the new length of the array)
+
+6. How to add an element to the beginning of an array?
+
+To add an element to the beginning of an array in JavaScript, you can use the unshift method. 
+The unshift method adds one or more elements to the front of an array and returns the new length of the array.
+
+var myArray = [2, 3, 4];
+myArray.unshift(1); // Adds 1 to the beginning of the array
+
+console.log(myArray); // Output: [1, 2, 3, 4]
+
+Keep in mind that unshift modifies the original array in place. If you want to create a new array with 
+an element added to the beginning without modifying the original array, you can use methods like concat or the spread operator (...).
+
+var myArray = [2, 3, 4];
+var newArray = [1].concat(myArray);
+
+console.log(myArray);  // Output: [2, 3, 4] (original array is unchanged)
+console.log(newArray); // Output: [1, 2, 3, 4]
+
+
+var myArray = [2, 3, 4];
+var newArray = [1, ...myArray];
+
+console.log(myArray);  // Output: [2, 3, 4] (original array is unchanged)
+console.log(newArray); // Output: [1, 2, 3, 4]
+
+7. Spread does a shallow or deep copy?
+The spread operator (...) in JavaScript performs a shallow copy, not a deep copy.
+
+When you use the spread operator on an array or an object, 
+it creates a new array or object and copies the elements or properties from the original array or object 
+into the new one. However, this process is shallow, meaning that nested arrays or objects within the 
+original array or object are still references, not independent copies.
+
+var originalArray = [1, 2, [3, 4]];
+
+// Shallow copy using spread operator
+var shallowCopy = [...originalArray];
+
+// Modify the original array
+originalArray[0] = 100;
+originalArray[2][0] = 300;
+
+console.log(originalArray);  // Output: [100, 2, [300, 4]]
+console.log(shallowCopy);    // Output: [1, 2, [300, 4]] (nested array is a reference)
+
+In the example, even though we modified the nested array [3, 4] in the originalArray, 
+the change is reflected in the shallowCopy because the nested array is still a reference.
+
+8. How to perform a deep copy?
+
+- JSON.parse(JSON.stringify(originalObject))
+
+const originalObject = {
+  a: 1,
+  b: {
+    c: 2,
+    d: [3, 4]
+  }
+};
+
+// Creating a deep copy using JSON.parse and JSON.stringify
+const deepCopy = JSON.parse(JSON.stringify(originalObject));
+
+// Modify the original object
+originalObject.a = 100;
+originalObject.b.c = 200;
+originalObject.b.d[0] = 300;
+
+console.log(originalObject);
+console.log(deepCopy);
+
+Only when copying an object without nested functions and we don't care if we lose the object prototype methods.
+
+- cloneDeep from lodash library
+
+const _ = require('lodash');  // or from ES6 import _ from 'lodash';
+
+const originalObject = {
+  a: 1,
+  b: {
+    c: 2,
+    d: [3, 4]
+  }
+};
+
+// Using cloneDeep to create a deep copy
+const deepCopy = _.cloneDeep(originalObject);
+
+// Modify the original object
+originalObject.a = 100;
+originalObject.b.c = 200;
+originalObject.b.d[0] = 300;
+
+console.log(originalObject);
+console.log(deepCopy);
+
+9. How pop works on array?
+
+
+The pop method in JavaScript is used to remove the last element from an array and return that element. 
+This method mutates the original array by reducing its length by 1. 
+If the array is empty (has a length of 0), pop returns undefined.
+
+var myArray = [1, 2, 3, 4, 5];
+var poppedElement = myArray.pop();
+
+console.log(poppedElement); // Output: 5 (the removed element)
+console.log(myArray);       // Output: [1, 2, 3, 4] (original array modified)
+
+var emptyArray = [];
+var poppedElement = emptyArray.pop();
+
+console.log(poppedElement); // Output: undefined
+console.log(emptyArray);   // Output: [] (original array remains empty)
+
+10. How shift works?
+
+The shift method in JavaScript is used to remove the first element from an array and return that element. Similar to pop, 
+shift mutates the original array by reducing its length by 1. If the array is empty (has a length of 0), shift returns undefined.
+
+var myArray = [1, 2, 3, 4, 5];
+var shiftedElement = myArray.shift();
+
+console.log(shiftedElement); // Output: 1 (the removed element)
+console.log(myArray);        // Output: [2, 3, 4, 5] (original array modified)
+
+11. Does includes method test with strict equality?
+
+Yes, the includes method in JavaScript uses strict equality (===) to determine whether a specific element is present in an array.
+
+If you have an array of objects and you want to check if the array includes a specific object, 
+the includes method won't work as expected. This is because includes uses strict equality (===) to compare elements, 
+and for objects, strict equality compares references, not the content of the objects.
+
+
+var obj1 = { name: 'John' };
+var obj2 = { name: 'John' };
+
+var arrayOfObjects = [obj1, { name: 'Jane' }, { name: 'Bob' }];
+
+console.log(arrayOfObjects.includes(obj1));  // Output: true (because it's the same reference)
+console.log(arrayOfObjects.includes(obj2));  // Output: false (different reference, even though content is the same)
+
+In order to test if an object with exact same properties is included do:
+
+custom checking with find or some
+
+var objToCheck = { name: 'John' };
+
+var includesObject = arrayOfObjects.some(obj => {
+  // Custom comparison function
+  return obj.name === objToCheck.name;
+});
+
+console.log(includesObject);  // Output: true
+
+var objToCheck = { name: 'John' };
+
+var foundObject = arrayOfObjects.find(obj => {
+  // Custom comparison function
+  return obj.name === objToCheck.name;
+});
+
+console.log(foundObject !== undefined);  // Output: true (foundObject is not undefined if a match is found)
+
+var objToCheck = { name: 'John' };
+
+var includesObject = arrayOfObjects.some(obj => {
+  return JSON.stringify(obj) === JSON.stringify(objToCheck);
+});
+
+console.log(includesObject);  // Output: true
+
+12. Can we add different types in one array?
+
+
+JavaScript allows you to add different types of values to an array because it is a dynamically typed language. 
+This flexibility is a characteristic of the language and is part of its design.
+
+var mixedArray = [1, 'two', true, { key: 'value' }, [4, 5, 6], function() { return 'Hello!'; }];
+
+console.log(mixedArray);
