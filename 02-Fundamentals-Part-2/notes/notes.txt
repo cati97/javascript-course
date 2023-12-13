@@ -278,3 +278,240 @@ This flexibility is a characteristic of the language and is part of its design.
 var mixedArray = [1, 'two', true, { key: 'value' }, [4, 5, 6], function() { return 'Hello!'; }];
 
 console.log(mixedArray);
+
+13. How to create an object in js?
+
+Object Literal:
+The simplest way to create an object is by using an object literal, which is a comma-separated list of key-value pairs wrapped in curly braces {}.
+
+const person = {
+  name: 'John',
+  age: 30,
+  occupation: 'Developer'
+};
+Using the new keyword with Object constructor:
+You can create an object using the Object constructor and the new keyword.
+
+const person = new Object();
+person.name = 'John';
+person.age = 30;
+person.occupation = 'Developer';
+Object.create method:
+You can use Object.create() to create a new object with a specified prototype object.
+
+const personPrototype = {
+  greet: function() {
+    console.log('Hello!');
+  }
+};
+
+const person = Object.create(personPrototype);
+person.name = 'John';
+person.age = 30;
+Function Constructor:
+You can create objects using a constructor function. This is a more advanced way and is often used in object-oriented programming.
+
+function Person(name, age, occupation) {
+  this.name = name;
+  this.age = age;
+  this.occupation = occupation;
+}
+
+const person = new Person('John', 30, 'Developer');
+ES6 Class:
+With the introduction of ES6, you can use class syntax to create objects.
+
+class Person {
+  constructor(name, age, occupation) {
+    this.name = name;
+    this.age = age;
+    this.occupation = occupation;
+  }
+}
+
+const person = new Person('John', 30, 'Developer');
+
+14. When to use bracket and dot notation for object access properties?
+
+Dot Notation:
+
+Use dot notation when the property name is a valid identifier and does not contain spaces or special characters.
+It is more concise and generally easier to read.
+
+const person = {
+  name: 'John',
+  age: 30
+};
+
+console.log(person.name); // John
+Bracket Notation:
+
+Use bracket notation when the property name is not a valid identifier or contains special characters, spaces, or when it is a variable.
+
+const person = {
+  'full name': 'John Doe',
+  '123-id': 'ABC123'
+};
+
+console.log(person['full name']); // John Doe
+console.log(person['123-id']); // ABC123
+
+const propertyName = 'age';
+console.log(person[propertyName]); // Accessing with a variable
+Bracket notation is also useful when dynamically accessing properties based on a variable or expression.
+
+const propertyName = 'age';
+console.log(person[propertyName]); // Accessing with a variable
+Bracket notation is necessary when dealing with property names that are reserved words in JavaScript.
+
+const person = {
+  class: 'A',
+  function: 'Engineer'
+};
+
+console.log(person['class']); // A
+console.log(person['function']); // Engineer
+
+15. How to create a function as method on an object?
+
+// Define an object
+const person = {
+  name: 'John',
+  age: 30,
+
+  // Define a method as a function
+  sayHello: function() {
+    console.log('Hello, my name is ' + this.name + ' and I am ' + this.age + ' years old.');
+  }
+};
+
+// Call the method
+person.sayHello(); // Output: Hello, my name is John and I am 30 years old.
+In modern JavaScript (ES6 and later), you can also use shorthand syntax for defining methods within objects:
+
+
+const person = {
+  name: 'John',
+  age: 30,
+
+  // Shorthand method syntax
+  sayHello() {
+    console.log('Hello, my name is ' + this.name + ' and I am ' + this.age + ' years old.');
+  }
+};
+
+person.sayHello(); // Output: Hello, my name is John and I am 30 years
+
+16. How does continue keyword work in for loop?
+
+
+The continue keyword in a for loop is used to skip the rest of the code inside the loop for the current iteration 
+and move on to the next iteration. It effectively jumps to the next iteration of the loop without executing 
+the remaining statements within the loop for the current iteration.
+
+
+for (let i = 0; i < 5; i++) {
+  if (i === 2) {
+    // Skip the rest of the code for i === 2 and move to the next iteration
+    continue;
+  }
+
+  console.log(`Iteration ${i}`);
+}
+
+// Output:
+// Iteration 0
+// Iteration 1
+// Iteration 3
+// Iteration 4
+
+17. How to use for loop for arrays?
+
+const friends = ["Anna", "John"]
+
+for (let i = 0; i < friends.length; i++) {
+  console.log(friends[i])
+}
+
+18. And how the break works?
+
+The break statement in a for loop is used to terminate the loop prematurely, 
+regardless of whether the loop condition is true or false. When the break statement is encountered, 
+the loop immediately exits, and the program continues with the next statement after the loop.
+
+
+for (let i = 0; i < 5; i++) {
+  if (i === 3) {
+    // Terminate the loop when i is equal to 3
+    break;
+  }
+
+  console.log(`Iteration ${i}`);
+}
+
+// Output:
+// Iteration 0
+// Iteration 1
+// Iteration 2
+
+19. How to loop backwards using for loop?
+
+for (let i = friends.length - 1; i >= 0; i--) {
+  console.log(friends[i])
+}
+
+20. Write the same using while loop.
+
+let i = friends.length - 1;
+
+while (i >= 0) {
+  console.log(friends[i]);
+  i++;
+}
+
+21. What is the use case for while loop?
+
+Whenever we don't know the exact number of iterations.
+
+Iterating Until a Condition is False:
+You might use a while loop when you need to iterate over a block of code until a certain condition becomes false. 
+For example, reading lines from a file until the end of the file is reached:
+
+let line = readLineFromFile();
+while (line !== null) {
+  console.log(line);
+  line = readLineFromFile();
+}
+
+Implementing Game Loops:
+In game development or simulations, you often have a game loop that continues running as long as the game is active. 
+The loop keeps updating the game state and rendering frames until a certain condition (like the player quitting the game) is met.
+
+let gameActive = true;
+while (gameActive) {
+  // Update game state
+  // Render frame
+  // Check for user input, etc.
+
+  // If a certain condition is met (e.g., player quits), set gameActive to false
+}
+User Input Validation:
+Use a while loop to repeatedly prompt the user for input until valid input is provided.
+
+let userInput;
+while (isNaN(userInput)) {
+  userInput = prompt('Enter a number:');
+}
+
+22. // Generate a random number between 1 and 6
+
+const randomNumber = Math.round(Math.random() * 5) + 1;
+
+console.log(randomNumber);
+
+Math.random(): Returns a random floating-point number between 0 (inclusive) and 1 (exclusive).
+Math.random() * 5: Scales the random number to a range between 0 (inclusive) and 5 (exclusive).
+Math.round(Math.random() * 5): Rounds the result to the nearest whole number.
+
+e.g.
+Math.random() * 5 - this can generate 4.76 which will be rounded to 5 and then 1 will be added and it will be 6.
