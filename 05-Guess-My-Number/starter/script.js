@@ -1,6 +1,8 @@
 'use strict';
 
-let randomNumber = Math.trunc(Math.random() * 20) + 1;
+const generateRandomNumber = () => Math.trunc(Math.random() * 20) + 1;
+
+let randomNumber = generateRandomNumber();
 
 let score = 20;
 let highscore = 0;
@@ -17,12 +19,16 @@ const againBtn = document.querySelector('.again');
 
 const body = document.querySelector('body');
 
+const displayMessage = msg => {
+  messageBox.textContent = msg;
+};
+
 checkBtn.addEventListener('click', () => {
   const guessValue = Number(guessInput.value);
   if (!guessValue) {
-    messageBox.textContent = 'No number!';
+    displayMessage('No number!');
   } else if (guessValue === randomNumber) {
-    messageBox.textContent = 'Correct number :)';
+    displayMessage('Correct number :)');
     secretNumberElement.textContent = randomNumber;
     if (score > highscore) {
       highscore = score;
@@ -31,23 +37,19 @@ checkBtn.addEventListener('click', () => {
     body.style.backgroundColor = '#60b347';
     secretNumberElement.style.width = '30rem';
   } else if (guessValue !== randomNumber) {
-    if (guessValue < randomNumber) {
-      messageBox.textContent = 'Too low!';
-    } else if (guessValue > randomNumber) {
-      messageBox.textContent = 'Too high!';
-    }
+    displayMessage(guessValue < randomNumber ? 'Too low!' : 'Too high!');
     if (score > 1) {
       score--;
     } else {
       score = 0;
-      messageBox.textContent = 'You lost!';
+      displayMessage('You lost the game!');
     }
     scoreElement.textContent = score;
   }
 });
 
 againBtn.addEventListener('click', () => {
-  randomNumber = Math.trunc(Math.random() * 20) + 1;
+  randomNumber = generateRandomNumber();
   score = 20;
   guessInput.value = '';
   messageBox.textContent = 'Start guessing...';
