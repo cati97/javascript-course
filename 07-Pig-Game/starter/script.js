@@ -1,7 +1,5 @@
 'use strict';
 
-// Variables
-
 let currentScorePlayer0 = 0;
 let currentScorePlayer1 = 0;
 
@@ -10,7 +8,6 @@ let totalScorePlayer1 = 0;
 
 let activePlayer = 'player--0';
 
-// Selecting elements
 const totalScore0El = document.querySelector('#score--0');
 const totalScore1El = document.querySelector('#score--1');
 
@@ -23,11 +20,19 @@ const currentScore1El = document.getElementById('current--1');
 const diceEl = document.querySelector('.dice');
 const rollDiceBtn = document.querySelector('.btn--roll');
 const holdScoreBtn = document.querySelector('.btn--hold');
+const newGameBtn = document.querySelector('.btn--new');
 
-// Common functions
 const resetGame = () => {
+  currentScorePlayer0 = 0;
+  currentScorePlayer1 = 0;
+  totalScorePlayer0 = 0;
+  totalScorePlayer1 = 0;
+
   totalScore0El.textContent = totalScorePlayer0;
   totalScore1El.textContent = totalScorePlayer1;
+  currentScore0El.textContent = currentScorePlayer0;
+  currentScore1El.textContent = currentScorePlayer1;
+
   diceEl.classList.add('hidden');
 };
 
@@ -54,7 +59,6 @@ const rollDice = () => {
   if (randomNumber === 1) {
     switchPlayer();
   } else {
-    // add points to current score
     if (activePlayer === 'player--0') {
       currentScorePlayer0 += randomNumber;
       currentScore0El.textContent = currentScorePlayer0;
@@ -76,9 +80,7 @@ const holdScore = () => {
   switchPlayer();
 };
 
-// Reset game at page reload
 resetGame();
-
-// Event listeners
 rollDiceBtn.addEventListener('click', rollDice);
 holdScoreBtn.addEventListener('click', holdScore);
+newGameBtn.addEventListener('click', resetGame);
