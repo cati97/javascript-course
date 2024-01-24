@@ -7,31 +7,27 @@ const closeBtn = document.querySelector('.close-modal'); // add event handler to
 const overlay = document.querySelector('.overlay'); // add event handler to change style to display hidden again on click
 
 const handleOpenModal = () => {
-  modal.style.display = 'block';
-  overlay.style.display = 'block';
+  modal.classList.remove('hidden');
+  overlay.classList.remove('hidden');
 };
 
 const handleCloseModal = () => {
-  modal.style.display = 'none';
-  overlay.style.display = 'none';
+  modal.classList.add('hidden');
+  overlay.classList.add('hidden');
 };
 
-showModalButtons.forEach(btn => {
-  btn.addEventListener('click', () => {
-    handleOpenModal();
-  });
-});
-
-closeBtn.addEventListener('click', () => {
-  handleCloseModal();
-});
-
-overlay.addEventListener('click', () => {
-  handleCloseModal();
-});
-
-document.addEventListener('keydown', event => {
+const handleEscapePress = event => {
   if (event.key === 'Escape') {
     handleCloseModal();
   }
+};
+
+showModalButtons.forEach(btn => {
+  btn.addEventListener('click', handleOpenModal);
 });
+
+closeBtn.addEventListener('click', handleCloseModal);
+
+overlay.addEventListener('click', handleCloseModal);
+
+document.addEventListener('keydown', handleEscapePress);
