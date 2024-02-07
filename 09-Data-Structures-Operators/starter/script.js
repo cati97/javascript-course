@@ -127,3 +127,14 @@ const guestNum = 0; // real possible value
 console.log(guestNum || 10); // 10 because guestNum 0 is treated as falsy value
 
 console.log(guestNum ?? 10); // 0 because guestNum 0 is treated as truthy value
+
+// 10. Or assignment operator ||= // Add assignment operator &&=
+
+let num = 0;
+// num = num || 50;
+// num ||= 50;
+console.log(num); // 50
+
+// 11. Nullish assignment operator ??=
+num ??= 50;
+console.log(num); // 0 - because now 0 is true
