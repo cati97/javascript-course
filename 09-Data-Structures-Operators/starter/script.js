@@ -46,6 +46,7 @@ console.log({ primary, secondary }); // {primary: 'Bruschetta', secondary: 'Foca
 
 const numbers = [1, 2, 3, [8, 9]];
 const [first, _, third, [firstNested, secondNested]] = numbers;
+console.log(_); // it is a regular variable name!
 // const [first, , third, [firstNested, secondNested]] = numbers; // can use underscore to skip but also nothing , ,
 console.log({ first, third, firstNested, secondNested });
 
@@ -56,3 +57,63 @@ const {
   sun: Sunday = {},
 } = restaurant.openingHours;
 console.log(openThu, CloseThu, Sunday);
+
+// 4. Spread operator - on the right side - where we enumerate multiple VALUES
+
+// Spread creates a shallow copy of an object or array
+
+const copyMainCourses = [...restaurant.mainMenu];
+
+const extendedMenu = ['Gnocchi', ...restaurant.mainMenu, 'Sandwich'];
+
+console.log(extendedMenu); //  ['Gnocchi', 'Pizza', 'Pasta', 'Risotto', 'Sandwich']
+
+const copyObjRestaurant = { ...restaurant, foundedIn: '1999' };
+console.log(copyObjRestaurant);
+
+// 5. Rest operator - on the left side - where we enumerate multiple VARIABLES
+
+const [firstNum, , ...restNumbers] = numbers; // Identifier '_' has already been declared - so it is better to use empty space!
+console.log(firstNum, restNumbers); // restNumbers is [3, [8, 9]] - all elements AFTER - NOT skipped elements
+
+// 6. Spread in functions (as passing multiple arguments to a functions) vs Rest parameters
+
+const calcSum = (...numbers) => {
+  // rest parameters - collecting all passed VALUES into an array - instead of explicitly naming VARIABLES - a, b, c, d
+  return numbers.reduce((acc, curr) => acc + curr, 0);
+};
+
+console.log(calcSum(1, 2, 3)); // passing one by one
+
+const randomNumbers = [7, 5, 4, 2];
+
+console.log(calcSum(...randomNumbers)); // spreading in place of passing value by value
+
+// 7. Rest parameters for one mandatory arg and rest optional
+
+const getIngredients = function (mandatoryIng, ...others) {
+  console.log({ mandatoryIng, others });
+};
+
+// {
+//   "mandatoryIng": "Cheese",
+//   "others": [
+//       "Mushrooms",
+//       "Olives"
+//   ]
+// }
+
+getIngredients('Cheese', 'Mushrooms', 'Olives');
+
+// 8. Destructuring parameters directly inside a function
+
+const calcArea = ({ length = 0, width = 0 }) => {
+  return length * width;
+};
+
+const rectangle = {
+  length: 50,
+  width: 100,
+};
+
+console.log(calcArea(rectangle));
