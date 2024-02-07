@@ -27,3 +27,17 @@ const restaurant = {
     },
   },
 };
+
+// Destructuring arrays to swap places
+
+let [primary, secondary] = [
+  restaurant.starterMenu[0],
+  restaurant.starterMenu[1],
+];
+
+console.log({ primary, secondary }); // {primary: 'Focaccia', secondary: 'Bruschetta'}
+
+// swapping
+[secondary, primary] = [primary, secondary];
+
+console.log({ primary, secondary }); // {primary: 'Bruschetta', secondary: 'Focaccia'}
