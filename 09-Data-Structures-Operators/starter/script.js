@@ -117,3 +117,13 @@ const rectangle = {
 };
 
 console.log(calcArea(rectangle));
+
+// 9. Nullish operator - works like or but treats 0 and '' like normal truthy values!!
+
+// Falsy values are only null and undefined
+
+const guestNum = 0; // real possible value
+
+console.log(guestNum || 10); // 10 because guestNum 0 is treated as falsy value
+
+console.log(guestNum ?? 10); // 0 because guestNum 0 is treated as truthy value
