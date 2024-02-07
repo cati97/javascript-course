@@ -28,12 +28,12 @@ const restaurant = {
   },
 };
 
-// Destructuring arrays to swap places
+// 1. Destructuring arrays to swap places
 
 let [primary, secondary] = [
   restaurant.starterMenu[0],
   restaurant.starterMenu[1],
-];
+]; // cannot be const because later we try to reassign doing this [secondary, primary]
 
 console.log({ primary, secondary }); // {primary: 'Focaccia', secondary: 'Bruschetta'}
 
@@ -41,3 +41,18 @@ console.log({ primary, secondary }); // {primary: 'Focaccia', secondary: 'Brusch
 [secondary, primary] = [primary, secondary];
 
 console.log({ primary, secondary }); // {primary: 'Bruschetta', secondary: 'Focaccia'}
+
+// 2. Destructuring nested arrays
+
+const numbers = [1, 2, 3, [8, 9]];
+const [first, _, third, [firstNested, secondNested]] = numbers;
+// const [first, , third, [firstNested, secondNested]] = numbers; // can use underscore to skip but also nothing , ,
+console.log({ first, third, firstNested, secondNested });
+
+// 3. Destructuring nested objects, renaming them and assigning default values
+
+const {
+  thu: { open: openThu, close: CloseThu },
+  sun: Sunday = {},
+} = restaurant.openingHours;
+console.log(openThu, CloseThu, Sunday);
