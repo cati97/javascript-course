@@ -203,3 +203,107 @@ const users = [
 ];
 
 console.log(users[0]?.name);
+
+// 16. Sets are iterable (which doesn't mean the exact same array methods are available)
+
+// the most frequent use case - to remove duplicates from an array - then convert it back to array
+
+const names = ['Anna', 'Peter', 'Anna', 'Peter', 'Peter', 'John'];
+const uniqueNames = new Set(names);
+console.log(uniqueNames);
+
+// set operations - we cannot access set elements like in an array - just checking if it exists - has
+
+// add
+uniqueNames.add('Margaret', 'Margaret'); // will only add once
+console.log(uniqueNames); // Set(4) {'Anna', 'Peter', 'John', 'Margaret' }
+
+uniqueNames.forEach(el => console.log(el)); // forEach is available on sets
+//uniqueNames.map(el => el); // map is NOT available on sets - uniqueNames.map is not a function
+
+// delete
+
+uniqueNames.delete('Margaret');
+console.log(uniqueNames);
+
+// has - if it includes this element
+console.log(uniqueNames.has('Margaret')); // false
+console.log(uniqueNames.has('Peter')); // true
+
+console.log(uniqueNames.size); // 3 - size not length as in arrays!
+
+uniqueNames.clear(); // clear the entire set
+
+const uniqueNamesArray = [...uniqueNames]; // or directly spread and create Set - const uniqueNames = [...new Set(names)]
+
+// 17. Map - key can be ANY type - even an array or object
+
+const usersMap = new Map();
+
+// set and get
+usersMap.set('name', 'John'); // first key, second value
+usersMap.set(true, 'We are open');
+usersMap.set(25, 'age');
+usersMap.set([2, 3], 'numbers'); // this doesn't make much sense but it is possible
+
+console.log(usersMap); // Map(1) {'name' => 'John'}
+
+console.log(usersMap.get('name')); // John
+
+// delete, size, has are the same as Set
+
+console.log(usersMap.has('name')); // true
+
+console.log(usersMap.size); // 1
+
+usersMap.delete('name');
+console.log(usersMap);
+
+// 18. How to specify keys and values in new Map
+
+const questionMap = new Map([
+  ['question', 'What is the best programming language?'],
+  [1, 'Javascript'],
+  [2, 'Java'],
+  [3, 'Python'],
+  ['correct', 1],
+  [true, 'Correct answer :D'],
+  [false, 'Wrong answer :('],
+]);
+
+// 19. How to convert an object to a map?
+
+Object.entries(person); // comes with [[]] nested arrays structure key value pairs as we need when creating new Map
+
+const personMap = new Map(Object.entries(person));
+console.log(personMap);
+
+// 20. Quiz app
+
+const question = questionMap.get('question');
+
+let options = '';
+
+for (const [key, value] of questionMap) {
+  if (typeof key === 'number') {
+    options += `${key}.1 ${value} \n`;
+  }
+}
+console.log(options);
+// const answer = Number(prompt(`${question} \n${options}`));
+
+// const isCorrectAnswer = answer === questionMap.get('correct');
+
+// console.log(questionMap.get(isCorrectAnswer)); // using power of boolean as key
+
+// 21. Convert Map to an array - actually a 2D array
+
+const mapArray = [...questionMap];
+console.log(mapArray);
+
+// 22. keys and values on the map
+
+console.log([...questionMap.keys()]); // must unpack with spread - otherwise it is an Iterator
+console.log([...questionMap.values()]);
+
+// 23. When to use what? - object, array, Map, Set
