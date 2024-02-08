@@ -138,3 +138,68 @@ console.log(num); // 50
 // 11. Nullish assignment operator ??=
 num ??= 50;
 console.log(num); // 0 - because now 0 is true
+
+// 12. for - of loop for easier looping over an array
+
+for (const item of numbers) {
+  console.log(item);
+}
+
+for (const [i, el] of numbers.entries()) {
+  // can only destructure if of entries()
+  console.log(i, el);
+}
+
+console.log(numbers.entries()); // Object [Array Iterator] {}
+console.log([...numbers.entries()]); // [ [ 0, 1 ], [ 1, 2 ], [ 2, 3 ], [ 3, [ 8, 9 ] ] ] - to unpack the iterator!
+
+// 13. Shorthand for object methods
+
+const person = {
+  firstName: 'Anna',
+  lastName: 'Smith',
+  getFullName: function () {
+    // before new shorthand syntax
+    return `${this.firstName} ${this.lastName}`;
+  },
+};
+
+console.log(person.getFullName());
+
+const person2 = {
+  firstName: 'Anna',
+  lastName: 'Smith',
+  getFullName() {
+    // NEW shorthand syntax
+    return `${this.firstName} ${this.lastName}`;
+  },
+  getAge(birthYear, currentYear) {
+    return currentYear - birthYear;
+  },
+};
+
+console.log(person2.getFullName());
+
+// 14. Optional chaining works also for methods!!
+
+// if we want to check if a method exists before calling it we can do:
+
+console.log(person2.getFull?.() || "Method doesn't exist");
+// console.log(person2.getFull()); //  person2.getFull is not a function
+
+// Chaining operator ? goes AFTER the method name we are not sure about if it exists!
+
+console.log(person?.middleName?.value); // Cannot read properties of undefined (reading 'value')
+// the error is thrown only when we are trying to access a property of undefined
+
+console.log(person2.getAge?.(1997, 2024) || 'No getAge method');
+
+// 15. Optional chaining works also on arrays
+
+const users = [
+  {
+    name: 'John',
+  },
+];
+
+console.log(users[0]?.name);
