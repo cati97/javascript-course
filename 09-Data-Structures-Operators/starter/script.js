@@ -307,3 +307,67 @@ console.log([...questionMap.keys()]); // must unpack with spread - otherwise it 
 console.log([...questionMap.values()]);
 
 // 23. When to use what? - object, array, Map, Set
+
+// Set - array with unique items or for better performance at searching an item
+// Array - for most cases, and when we want to manipulate data
+
+// Objects - most cases - because we are used to it - dot notation or bracket, getting JSON object from API and possibility of function methods
+// Map - when we need specifically different types of the keys or for better performance
+
+// 24. Strings - methods indexOf(), lastIndexOf(), slice()
+
+// indexOf() - first occurrence of character or word
+// lastIndexOf() - last occurrence
+// slice() - get substring of a string
+
+// What is the best programming language?
+
+console.log(question.slice(-1)); // get the last character of a string - ?
+console.log(question.slice(0, question.indexOf(' '))); // get the first word - until first occurrence of empty space - What
+console.log(question.slice(question.lastIndexOf(' ') + 1)); // get the last word - plus 1 because the empty space was included at start
+
+// 25. Why we have all these methods on primitive type string?
+
+// We don't - javascript converts behind the scenes primitive string type to object type String with all these methods when we try to access them
+
+// it creates new String('Anna')
+
+// 26. How to capitalize a string?
+
+const firstName = 'joNaS';
+const lowerCaseName = firstName.toLowerCase();
+const capitalizedName = lowerCaseName[0].toUpperCase() + lowerCaseName.slice(1);
+const capitalizedName2 = lowerCaseName.replace(
+  lowerCaseName[0],
+  lowerCaseName[0].toUpperCase()
+);
+
+console.log(capitalizedName);
+console.log(capitalizedName2);
+
+// 27. Other string method - trim
+
+// trim() - trims all white characters at the beginning and at the end of the string
+
+const trimmedEmail = '   jonas@EXAMPLe.com   \n'.toLowerCase().trim();
+console.log(trimmedEmail);
+
+// replace() - works only for the first occurrence - if we want to replace all we can use a regex or now there is a new method replaceAll - since 2021
+
+const priceRanges = '22,5 / 36,7';
+
+console.log(priceRanges.replace(',', '.')); // 22.5 / 36,7
+console.log(priceRanges.replaceAll(',', '.')); // 22.5 / 36.7 :D works!
+console.log(priceRanges.replaceAll(/\,/g, '.')); // 22.5 / 36.7 - we need to escape comma since it has another meaning and use g for global
+
+// How to use padStart to mask a credit card number?
+
+const testCardNumber = '2345556776533668';
+const testCardNumber2 = 2345556776533668;
+const maskCreditCard = number => {
+  const stringNumber = String(number);
+  return stringNumber.slice(-4).padStart(stringNumber.length, '*');
+};
+
+console.log(maskCreditCard(testCardNumber)); // ************3668
+console.log(maskCreditCard(testCardNumber2)); // ************3668
