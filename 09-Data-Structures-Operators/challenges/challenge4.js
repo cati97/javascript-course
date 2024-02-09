@@ -47,12 +47,9 @@ document.querySelector("button").addEventListener("click", () => {
 });
 
 function convertToCamelCase(variableName) {
-  const [firstWord, secondWord] = variableName.trim().split("_");
-  const firstWordLowerCase = firstWord.toLowerCase();
-  const secondWordCapitalize = secondWord
-    .toLowerCase()
-    .replace(secondWord.toLowerCase()[0], secondWord[0].toUpperCase());
-  return firstWordLowerCase + secondWordCapitalize;
+  const [firstWord, secondWord] = variableName.toLowerCase().trim().split("_");
+  const secondWordCapitalized = secondWord.replace(secondWord[0], secondWord[0].toUpperCase());
+  return `${firstWord}${secondWordCapitalized}`;
 }
 
 // for testing purposes
