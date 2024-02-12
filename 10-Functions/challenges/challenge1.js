@@ -37,22 +37,9 @@ const poll = {
   options: ["0: JavaScript", "1: Python", "2: Rust", "3: C++"],
   answers: new Array(4).fill(0),
   registerNewAnswer() {
-    let multilineQuestion = this.question;
-    let possibleNumbers = [];
-    console.log(possibleNumbers);
-    for (const option of this.options) {
-      multilineQuestion += `\n${option}`;
-      possibleNumbers.push(Number(option.split(":")[0]));
-    }
-    multilineQuestion += "\n(Write option number)";
-    const userAnswer = Number(prompt(multilineQuestion));
-    if (!isNaN(userAnswer) && possibleNumbers.includes(userAnswer)) {
-      console.log("correct");
-      this.answers[userAnswer] += 1;
-    } else {
-      console.log("wrong");
-    }
-    this.displayResults("string");
+    const userAnswer = Number(prompt(`${this.question}\n${this.options.join("\n")}(Write option number)`));
+    !isNaN(userAnswer) && userAnswer < this.options.length && this.answers[userAnswer]++;
+    this.displayResults();
   },
   displayResults(type = "array") {
     if (type === "array") {
@@ -76,3 +63,5 @@ console.log(displayResultsArray());
 
 const displayResultsString = poll.displayResults.bind({ answers: testData2 }, "string");
 console.log(displayResultsString());
+
+poll.displayResults.call({ answers: testData1 }); // bind will return a new function, call with immediately call it with new this context
