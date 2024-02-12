@@ -129,3 +129,31 @@ const swissArgs = ['Jan', 245];
 bookFn.call(swiss, ...swissArgs); // call takes each arg separately
 
 bookFn.apply(swiss, swissArgs); // apply takes an array or args
+
+// 9. How does the bind method work?
+
+// it returns a new function with changed this context
+
+const newBookFn = bookFn.bind(swiss);
+newBookFn('Peter', 789); // Peter booked flight SW789 at airline Swiss
+
+// we can also create a more specific function from a general one - setting always flight number to 123
+
+const newBookFnJan25 = bookFn.bind(swiss, 'Jan', 25); // nothing will be overwritten - it is not default parameters - it is always going to be as set
+newBookFnJan25('Peter'); // Jan booked flight SW25 at airline Swiss
+
+const newBookFn123 = bookFn.bind(swiss, null, 123);
+console.log(newBookFn123);
+newBookFn123('Peter'); // null booked flight SW123 at airline Swiss
+// I don't know how to bind only the second argument!!! - seems like a very hard thing to achieve - custom function or lodash
+
+const addTax = (rate, value) => value + value * rate;
+
+const addVAT = addTax.bind(null, 0.23);
+console.log(addVAT(100));
+
+const addTax2 = rate => value => value + value * rate;
+
+const addVAT2 = addTax2(0.23);
+console.log(addVAT2);
+console.log(addVAT2(100));
