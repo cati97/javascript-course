@@ -157,3 +157,45 @@ const addTax2 = rate => value => value + value * rate;
 const addVAT2 = addTax2(0.23);
 console.log(addVAT2);
 console.log(addVAT2(100));
+
+// 10. What is IIFE?
+
+// IIFE stands for Immediately Invoked Function Expression. It's a JavaScript function that runs as soon as it is defined.
+// It's typically used to create a separate scope for variables to avoid polluting the global scope and to encapsulate code.
+
+(function () {
+  var localVar = 'This is a local variable';
+  console.log(localVar);
+})();
+
+// we must wrap it in () because otherwise it throws an error that function has no name
+
+// it also works with array functions
+
+(() => console.log('hello from array IIFE'))(); // hello from array IIFE
+
+// 11. What are closures in js?
+
+// In JavaScript, a closure is a combination of a function and the lexical environment within which that function was declared.
+// This allows the function to retain access to variables from its surrounding scope even after the outer function has finished executing.
+
+function outerFunction() {
+  let outerVariable = 'I am from the outer function';
+
+  function innerFunction() {
+    console.log(outerVariable); // innerFunction has access to outerVariable
+  }
+
+  return innerFunction;
+}
+
+let closure = outerFunction();
+closure(); // Output: I am from the outer function
+console.dir(closure); // console dir of function shows the Closure as inner property - we cannot access the variable directly
+// [[Scopes]] - this double [[]] mean that it is inner property
+// Scopes[3]
+// Closure (outerFunction) {outerVariable: 'I am from the outer function'}
+
+// 12. What does console.dir() method do?
+// console.dir() is a method in JavaScript used to display an interactive list of the properties of the specified JavaScript object in the console.
+// It's particularly useful for examining the structure of complex objects, such as arrays or objects with nested properties.
