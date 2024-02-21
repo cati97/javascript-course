@@ -22,12 +22,14 @@ GOOD LUCK 😀
 */
 
 const checkDogs = (dogsJulia, dogsKate) => {
-  const correctedDogsJulia = [...dogsJulia];
+  const correctedDogsJulia = [...dogsJulia]; // instead we can use dogsJulia.slice() to create a shallow copy
   correctedDogsJulia.splice(0, 1); // removes the first element
   correctedDogsJulia.splice(-2); // removes last two elements
-  const mergedDogs = [...correctedDogsJulia, ...dogsKate];
+  // dogsJulia.slice(1, 3) - it would also give as the array without the first one and two last
+  const mergedDogs = [...correctedDogsJulia, ...dogsKate]; // we can also use the concat
+  //   const mergedDogs = correctedDogsJulia.concat(dogsKate);
   mergedDogs.forEach((dogAge, i) => {
-    if (dogAge > 3) {
+    if (dogAge >= 3) {
       console.log(`Dog number ${i + 1} is an adult, and is ${dogAge} years old`);
     } else {
       console.log(`Dog number ${i + 1} is still a puppy 🐶`);
