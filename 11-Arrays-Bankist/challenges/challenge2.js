@@ -28,3 +28,14 @@ const calcAverageHumanAge = (dogAges) => {
 
 calcAverageHumanAge([5, 2, 4, 1, 15, 8, 3]);
 calcAverageHumanAge([16, 6, 10, 5, 6, 1, 4]);
+
+const calcMaxReduce = (arr) => {
+  return arr.reduce((acc, curr) => (curr > acc ? curr : acc), arr[0]);
+};
+
+const calcMinReduce = (arr) => {
+  return arr.reduce((acc, curr) => (curr > acc ? acc : curr), arr[0]);
+};
+
+console.log(calcMaxReduce([5, 2, 4, 1, 15, 8, 3]));
+console.log(calcMinReduce([5, 2, 4, 1, 15, 8, 3]));
