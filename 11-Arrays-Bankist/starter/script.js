@@ -79,3 +79,30 @@ const displayMovements = movements => {
 };
 
 displayMovements(account1.movements);
+
+const displayBalance = movements => {
+  const balance = movements.reduce((acc, curr) => acc + curr, 0);
+  labelBalance.textContent = `${balance}€`;
+};
+
+displayBalance(account1.movements);
+
+const displaySummary = movements => {
+  const sumIn = movements
+    .filter(mov => mov > 0)
+    .reduce((acc, curr) => acc + curr, 0);
+  labelSumIn.textContent = `${sumIn}€`;
+
+  const sumOut = movements
+    .filter(mov => mov < 0)
+    .reduce((acc, curr) => acc + curr, 0);
+  labelSumOut.textContent = `${Math.abs(sumOut)}€`;
+
+  const interest = movements
+    .filter(mov => mov > 0)
+    .map(mov => (mov * 1.2) / 100)
+    .reduce((acc, curr) => acc + curr, 0);
+  labelSumInterest.textContent = `${interest}€`;
+};
+
+displaySummary(account1.movements);
