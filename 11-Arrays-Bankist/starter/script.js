@@ -61,10 +61,10 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
-const displayMovements = movements => {
+const displayMovements = account => {
   containerMovements.innerHTML = ''; // empty the movements container before start
 
-  movements.forEach((mov, i) => {
+  account.movements.forEach((mov, i) => {
     const type = mov > 0 ? 'deposit' : 'withdrawal';
     const html = `
     <div class="movements__row">
@@ -78,16 +78,13 @@ const displayMovements = movements => {
   });
 };
 
-displayMovements(account1.movements);
-
-const displayBalance = movements => {
-  const balance = movements.reduce((acc, curr) => acc + curr, 0);
+const displayBalance = account => {
+  const balance = account.movements.reduce((acc, curr) => acc + curr, 0);
   labelBalance.textContent = `${balance}€`;
 };
 
-displayBalance(account1.movements);
-
-const displaySummary = movements => {
+const displaySummary = account => {
+  const { movements, interestRate } = account;
   const sumIn = movements
     .filter(mov => mov > 0)
     .reduce((acc, curr) => acc + curr, 0);
@@ -100,9 +97,54 @@ const displaySummary = movements => {
 
   const interest = movements
     .filter(mov => mov > 0)
-    .map(mov => (mov * 1.2) / 100)
+    .map(mov => (mov * interestRate) / 100)
     .reduce((acc, curr) => acc + curr, 0);
   labelSumInterest.textContent = `${interest}€`;
 };
 
-displaySummary(account1.movements);
+const createUsernames = accountsArr => {
+  accountsArr.forEach(acc => {
+    acc.username = acc.owner
+      .toLowerCase()
+      .split(' ')
+      .map(name => name[0])
+      .join('');
+  });
+};
+
+createUsernames(accounts);
+
+let currentAccount;
+
+btnLogin.addEventListener('click', e => {
+  e.preventDefault(); // default behavior of a button inside a form element is to reload the page after click
+  // any input inside a form on enter press triggers the submit btn
+  const username = inputLoginUsername.value;
+  const pin = Number(inputLoginPin.value);
+  // console.log(accounts); // now reload doesn't happens so I can see the result
+  currentAccount = accounts.find(acc => acc.username === username);
+  if (!currentAccount) {
+    alert(`User not found!`);
+    containerApp.style.opacity = 0;
+    labelWelcome.textContent = 'Log in to get started';
+  }
+  if (currentAccount.pin === pin) {
+    labelWelcome.textContent = `Welcome back, ${
+      currentAccount.owner.split(' ')[0]
+    }!`;
+    containerApp.style.opacity = 100; // display main container
+    displayBalance(currentAccount);
+    displaySummary(currentAccount);
+    displayMovements(currentAccount);
+
+    inputLoginUsername.value = '';
+    inputLoginPin.value = '';
+
+    inputLoginUsername.blur(); // loose focus
+    inputLoginPin.blur();
+  } else {
+    alert(`Wrong password!`);
+    containerApp.style.opacity = 0;
+    labelWelcome.textContent = 'Log in to get started';
+  }
+});
