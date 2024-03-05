@@ -20,9 +20,10 @@ GOOD LUCK 😀
 const calcAverageHumanAge = (dogAges) => {
   const humanDogAges = dogAges.map((age) => (age <= 2 ? age * 2 : 16 + age * 4));
   const adultDogs = humanDogAges.filter((age) => age >= 18);
-  const sumAdultAge = adultDogs.reduce((acc, curr) => acc + curr, 0);
-  const averageAge = sumAdultAge / adultDogs.length;
-  console.log(averageAge);
+  //   const sumAdultAge = adultDogs.reduce((acc, curr) => acc + curr, 0);
+  const sumAdultAgeAvg = adultDogs.reduce((acc, curr, i, arr) => acc + curr / arr.length, 0);
+  //   const averageAge = sumAdultAge / adultDogs.length;
+  console.log(sumAdultAgeAvg);
 };
 
 calcAverageHumanAge([5, 2, 4, 1, 15, 8, 3]);
