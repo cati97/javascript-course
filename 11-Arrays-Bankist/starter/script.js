@@ -129,6 +129,10 @@ const clearInput = inputElement => {
   inputElement.blur(); // lose focus
 };
 
+const logoutUser = () => {
+  containerApp.style.opacity = 0;
+  labelWelcome.textContent = 'Log in to get started';
+};
 let currentAccount;
 
 btnLogin.addEventListener('click', e => {
@@ -140,24 +144,24 @@ btnLogin.addEventListener('click', e => {
   currentAccount = accounts.find(acc => acc.username === username);
   if (!currentAccount) {
     alert(`User not found!`);
-    containerApp.style.opacity = 0;
-    labelWelcome.textContent = 'Log in to get started';
-  }
-  if (currentAccount.pin === pin) {
-    labelWelcome.textContent = `Welcome back, ${
-      currentAccount.owner.split(' ')[0]
-    }!`;
-    containerApp.style.opacity = 100; // display main container
-    displayBalance(currentAccount);
-    displaySummary(currentAccount);
-    displayMovements(currentAccount);
-
-    clearInput(inputLoginUsername);
-    clearInput(inputLoginPin);
+    logoutUser();
   } else {
-    alert(`Wrong password!`);
-    containerApp.style.opacity = 0;
-    labelWelcome.textContent = 'Log in to get started';
+    if (currentAccount.pin === pin) {
+      labelWelcome.textContent = `Welcome back, ${
+        currentAccount.owner.split(' ')[0]
+      }!`;
+      containerApp.style.opacity = 100; // display main container
+      displayBalance(currentAccount);
+      displaySummary(currentAccount);
+      displayMovements(currentAccount);
+
+      clearInput(inputLoginUsername);
+      clearInput(inputLoginPin);
+    } else {
+      alert(`Wrong password!`);
+      containerApp.style.opacity = 0;
+      labelWelcome.textContent = 'Log in to get started';
+    }
   }
 });
 
@@ -182,4 +186,30 @@ btnTransfer.addEventListener('click', e => {
 
   clearInput(inputTransferTo);
   clearInput(inputTransferAmount);
+});
+
+const closeAccount = account => {
+  const foundAccIndex = accounts.findIndex(
+    acc => acc.username === account.username
+  );
+  accounts.splice(foundAccIndex, 1); // removes/mutates the original array
+};
+
+btnClose.addEventListener('click', function (e) {
+  e.preventDefault();
+  const confirmUsername = inputCloseUsername.value;
+  const confirmPIN = Number(inputClosePin.value);
+
+  if (
+    confirmUsername === currentAccount.username &&
+    confirmPIN === currentAccount.pin
+  ) {
+    closeAccount(currentAccount);
+    alert('Account closed!');
+    logoutUser();
+  } else {
+    alert('Invalid data!');
+  }
+  clearInput(inputCloseUsername);
+  clearInput(inputClosePin);
 });
