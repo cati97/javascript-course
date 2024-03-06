@@ -118,6 +118,17 @@ const getBalance = account => {
 
 createUsernames(accounts);
 
+const updateUI = account => {
+  displayBalance(account);
+  displaySummary(account);
+  displayMovements(account);
+};
+
+const clearInput = inputElement => {
+  inputElement.value = '';
+  inputElement.blur(); // lose focus
+};
+
 let currentAccount;
 
 btnLogin.addEventListener('click', e => {
@@ -141,11 +152,8 @@ btnLogin.addEventListener('click', e => {
     displaySummary(currentAccount);
     displayMovements(currentAccount);
 
-    inputLoginUsername.value = '';
-    inputLoginPin.value = '';
-
-    inputLoginUsername.blur(); // loose focus
-    inputLoginPin.blur();
+    clearInput(inputLoginUsername);
+    clearInput(inputLoginPin);
   } else {
     alert(`Wrong password!`);
     containerApp.style.opacity = 0;
@@ -157,30 +165,21 @@ btnTransfer.addEventListener('click', e => {
   e.preventDefault();
   const transferTo = inputTransferTo.value;
   const amount = Number(inputTransferAmount.value);
+  const receiverAccount = accounts.find(acc => acc.username === transferTo);
 
-  if (getBalance(currentAccount) >= amount) {
-    const foundReceiver = accounts.find(acc => acc.username === transferTo);
-    if (foundReceiver) {
-      if (foundReceiver.owner === currentAccount.owner) {
-        alert('You cannot transfer money to yourself!');
-      } else {
-        currentAccount.movements.push(Number(`-${amount}`));
-        foundReceiver.movements.push(amount);
-
-        displayBalance(currentAccount);
-        displaySummary(currentAccount);
-        displayMovements(currentAccount);
-
-        inputTransferTo.value = '';
-        inputTransferAmount.value = '';
-
-        inputTransferTo.blur();
-        inputTransferAmount.blur();
-      }
-    } else {
-      alert('Receiver not found!');
-    }
+  if (
+    amount > 0 &&
+    getBalance(currentAccount) >= amount &&
+    receiverAccount &&
+    receiverAccount.username !== currentAccount.username
+  ) {
+    currentAccount.movements.push(-amount);
+    receiverAccount.movements.push(amount);
+    updateUI(currentAccount);
   } else {
-    alert(`The amount ${amount} you want transfer exceeds your balance!`);
+    alert(`Invalid transfer!`);
   }
+
+  clearInput(inputTransferTo);
+  clearInput(inputTransferAmount);
 });
