@@ -71,7 +71,7 @@ const displayMovements = account => {
       <div class="movements__type movements__type--${type}">${
       i + 1
     } ${type}</div>
-      <div class="movements__value">${mov}</div>
+      <div class="movements__value">${mov}€</div>
     </div
     `;
     containerMovements.insertAdjacentHTML('afterbegin', html);
@@ -112,6 +112,10 @@ const createUsernames = accountsArr => {
   });
 };
 
+const getBalance = account => {
+  return account.movements.reduce((acc, curr) => acc + curr, 0);
+};
+
 createUsernames(accounts);
 
 let currentAccount;
@@ -146,5 +150,37 @@ btnLogin.addEventListener('click', e => {
     alert(`Wrong password!`);
     containerApp.style.opacity = 0;
     labelWelcome.textContent = 'Log in to get started';
+  }
+});
+
+btnTransfer.addEventListener('click', e => {
+  e.preventDefault();
+  const transferTo = inputTransferTo.value;
+  const amount = Number(inputTransferAmount.value);
+
+  if (getBalance(currentAccount) >= amount) {
+    const foundReceiver = accounts.find(acc => acc.username === transferTo);
+    if (foundReceiver) {
+      if (foundReceiver.owner === currentAccount.owner) {
+        alert('You cannot transfer money to yourself!');
+      } else {
+        currentAccount.movements.push(Number(`-${amount}`));
+        foundReceiver.movements.push(amount);
+
+        displayBalance(currentAccount);
+        displaySummary(currentAccount);
+        displayMovements(currentAccount);
+
+        inputTransferTo.value = '';
+        inputTransferAmount.value = '';
+
+        inputTransferTo.blur();
+        inputTransferAmount.blur();
+      }
+    } else {
+      alert('Receiver not found!');
+    }
+  } else {
+    alert(`The amount ${amount} you want transfer exceeds your balance!`);
   }
 });
