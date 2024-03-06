@@ -213,3 +213,20 @@ btnClose.addEventListener('click', function (e) {
   clearInput(inputCloseUsername);
   clearInput(inputClosePin);
 });
+
+const getMax = numbers =>
+  numbers.reduce((acc, curr) => (curr > acc ? curr : acc), numbers[0]);
+
+btnLoan.addEventListener('click', e => {
+  e.preventDefault();
+  const amount = Number(inputLoanAmount.value);
+  const loanMax = getMax(currentAccount.movements) * 10;
+
+  if (amount > 0 && currentAccount.movements.some(mov => mov >= 0.1 * amount)) {
+    currentAccount.movements.push(amount);
+    updateUI(currentAccount);
+  } else {
+    alert(`Loan denied! You can loan up to ${loanMax}!`);
+  }
+  clearInput(inputLoanAmount);
+});
