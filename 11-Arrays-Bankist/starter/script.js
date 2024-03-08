@@ -61,10 +61,15 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
-const displayMovements = account => {
+const displayMovements = (account, sort = false) => {
   containerMovements.innerHTML = ''; // empty the movements container before start
 
-  account.movements.forEach((mov, i) => {
+  // we need to spread it because sort would mutate the original array
+  const movements = sort
+    ? [...account.movements].sort((a, b) => a - b)
+    : account.movements;
+
+  movements.forEach((mov, i) => {
     const type = mov > 0 ? 'deposit' : 'withdrawal';
     const html = `
     <div class="movements__row">
@@ -229,4 +234,39 @@ btnLoan.addEventListener('click', e => {
     alert(`Loan denied! You can loan up to ${loanMax}!`);
   }
   clearInput(inputLoanAmount);
+});
+
+// flat() is by default only 1 level deep - we can pass an argument to flat on more nested levels
+
+// console.log([[1, 2, [3, 4]], [2, 4], 6].flat(2)); // [1, 2, 3, 4, 2, 4, 6]
+
+// sort - compare functions works like:
+// if return < 0 keep the position A, B
+// if return > 0 switch the positions B, A
+
+// console.log(
+//   account1.movements.sort((a, b) => {
+//     if (a > b) {
+//       return 1; // if a (first element in arr is greater than second arg b - switch positions)
+//     }
+//     if (b > a) {
+//       // it means the order is already increasing so it is good so we leave it
+//       return -1; // it doesn't have to be -1 - just less than 0 any negative number
+//     }
+//   })
+// );
+
+// [-650, -400, -130, 70, 200, 450, 1300, 3000]
+
+// a - b will be always positive number is a is greater than b right?
+// 450 - 400 = 50; and we only need a positive number
+
+//console.log(account2.movements.sort((a, b) => a - b)); // increasing order a-b will return a positive number if a > b and negative is a < b
+//console.log(account2.movements.sort((a, b) => b - a)); // decreasing order
+
+let sorted = false;
+
+btnSort.addEventListener('click', () => {
+  displayMovements(currentAccount, !sorted);
+  sorted = !sorted;
 });
