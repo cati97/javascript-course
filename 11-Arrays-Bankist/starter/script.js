@@ -270,3 +270,110 @@ btnSort.addEventListener('click', () => {
   displayMovements(currentAccount, !sorted);
   sorted = !sorted;
 });
+
+console.log(Array.from({ length: 100 }, () => Math.trunc(Math.random() * 7)));
+
+const movementsUI = Array.from(document.querySelectorAll('.movements__value'));
+console.log(movementsUI);
+
+// Array.from can be used to convert from other iterable like Set Map NodeList to Array
+
+labelBalance.addEventListener('click', () => {
+  const movementsUI = Array.from(
+    document.querySelectorAll('.movements__value'),
+    movementsUI.map(el => Number(el.textContent.replace('€', ''))) // we can do mapping directly on Array.from as second callback argument
+  );
+  console.log(movementsUI.map(el => Number(el.textContent.replace('€', ''))));
+
+  // alternative solution
+
+  // [...document.querySelectorAll('.movements__value')].map(el => Number(el.textContent.replace('€', '')))
+});
+
+// array practice
+
+// 1. calculate total bank deposit
+
+const bankDepositSum = accounts
+  .flatMap(acc => acc.movements)
+  .filter(mov => mov > 0)
+  .reduce((acc, curr) => acc + curr, 0);
+console.log(bankDepositSum);
+
+// 2. count how many deposits they were with at least 1000
+
+const depositsAbove1000 = accounts
+  .flatMap(acc => acc.movements)
+  .filter(mov => mov > 1000).length;
+
+console.log(depositsAbove1000);
+
+// how to do that using reduce ?
+
+const depositsAbove1000Reduce = accounts
+  .flatMap(acc => acc.movements)
+  .reduce((acc, curr) => (curr > 1000 ? acc + 1 : acc), 0);
+
+console.log(depositsAbove1000Reduce);
+
+// acc++ increases by one but returns the old value
+// ++acc increases by one and returns the new value
+
+const depositsAbove1000ReducePrefix = accounts
+  .flatMap(acc => acc.movements)
+  .reduce((acc, curr) => (curr > 1000 ? ++acc : acc), 0);
+
+console.log(depositsAbove1000ReducePrefix);
+
+// we can directly destruct it
+const { deposits, withdrawals } = accounts
+  .flatMap(acc => acc.movements)
+  .reduce(
+    (acc, curr) => {
+      // curr > 0 ? (acc.deposits += curr) : (acc.withdrawals += curr);
+      acc[curr > 0 ? 'deposits' : 'withdrawals'] += curr; // using bracket notation instead of dot to use an expression
+      return acc; // reduce always has to return the accumulator
+    },
+    { withdrawals: 0, deposits: 0 }
+  );
+
+console.log(deposits, withdrawals);
+
+// how to use reduce to filter an array?
+
+const filteredDeposits = account1.movements.filter(num => num > 0);
+console.log(filteredDeposits); // [200, 450, 3000, 70, 1300]
+
+const filteredDepositsReduce = account1.movements.reduce((acc, curr) => {
+  if (curr > 0) {
+    acc.push(curr);
+  }
+  return acc;
+}, []);
+
+console.log(filteredDepositsReduce);
+
+const filteredDepositsReduce2 = account1.movements.reduce((acc, curr) => {
+  if (curr > 0) {
+    return [...acc, curr];
+  }
+  return acc;
+}, []);
+
+console.log(filteredDepositsReduce2);
+
+const filteredDepositsReduce3 = account1.movements.reduce(
+  (acc, curr) => (curr > 0 ? [...acc, curr] : acc),
+  []
+);
+
+console.log(filteredDepositsReduce3);
+
+const mappedMovementsToDeposits = account1.movements.reduce(
+  (acc, curr) => [...acc, Math.abs(curr)],
+  []
+);
+
+console.log(mappedMovementsToDeposits);
+
+// we can use reduce basically for all kind of things!
