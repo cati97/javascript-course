@@ -38,9 +38,7 @@ const dogs = [
 
 // 1.
 
-dogs.forEach((dog) => {
-  dog.recommendedFood = dog.weight ** 0.75 * 28;
-});
+dogs.forEach((dog) => (dog.recommendedFood = Math.trunc(dog.weight ** 0.75 * 28)));
 
 console.log(dogs);
 
@@ -51,10 +49,7 @@ const dogEatsTooMuch = (dog) => {
 };
 
 const dogSarah = dogs.find((dog) => dog.owners.includes("Sarah"));
-const portionDogSarah = dogEatsTooMuch(dogSarah);
-if (dogEatsTooMuch(dogSarah)) {
-  console.log(`Sarah's dog is eating too much`);
-}
+console.log(`Sarah's dog is eating too ${dogEatsTooMuch(dogSarah) ? "much" : "little"}`);
 
 // 3.
 
@@ -64,6 +59,8 @@ const ownersEatTooLittle = dogs.reduce((acc, curr) => (!dogEatsTooMuch(curr) ? [
 console.log(ownersEatTooMuch);
 console.log(ownersEatTooLittle);
 
+const ownersEatTooMuchFilter = dogs.filter((dog) => dogEatsTooMuch(dog)).flatMap((dog) => dog.owners);
+console.log(ownersEatTooMuchFilter);
 // 4.
 
 console.log(`${ownersEatTooMuch.join(" and ")}'s dogs eat too much!`);
@@ -80,12 +77,12 @@ const dogEatsOkayAmount = (dog) => {
   return dog.curFood > dog.recommendedFood * 0.9 && dog.curFood < dog.recommendedFood * 1.1;
 };
 
-const anyDogEatsOkay = dogs.some((dog) => dogEatsOkayAmount(dog));
+const anyDogEatsOkay = dogs.some((dog) => dogEatsOkayAmount(dog)); // shortcut!!! dogs.some(dogEatsOkayAmount)
 console.log(anyDogEatsOkay);
 
 // 7.
 
-const allDogsEatingOK = dogs.filter((dog) => dogEatsOkayAmount(dog));
+const allDogsEatingOK = dogs.filter((dog) => dogEatsOkayAmount(dog)); // shortcut!!! dogs.filter(dogEatsOkayAmount)
 console.log(allDogsEatingOK);
 
 // 8.
