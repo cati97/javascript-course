@@ -94,7 +94,7 @@ const displayMovements = function (movements, sort = false) {
         <div class="movements__type movements__type--${type}">${
       i + 1
     } ${type}</div>
-        <div class="movements__value">${mov}€</div>
+        <div class="movements__value">${mov.toFixed(2)}€</div>
       </div>
     `;
 
@@ -104,19 +104,19 @@ const displayMovements = function (movements, sort = false) {
 
 const calcDisplayBalance = function (acc) {
   acc.balance = acc.movements.reduce((acc, mov) => acc + mov, 0);
-  labelBalance.textContent = `${acc.balance}€`;
+  labelBalance.textContent = `${acc.balance.toFixed(2)}€`;
 };
 
 const calcDisplaySummary = function (acc) {
   const incomes = acc.movements
     .filter(mov => mov > 0)
     .reduce((acc, mov) => acc + mov, 0);
-  labelSumIn.textContent = `${incomes}€`;
+  labelSumIn.textContent = `${incomes.toFixed(2)}€`;
 
   const out = acc.movements
     .filter(mov => mov < 0)
     .reduce((acc, mov) => acc + mov, 0);
-  labelSumOut.textContent = `${Math.abs(out)}€`;
+  labelSumOut.textContent = `${Math.abs(out).toFixed(2)}€`;
 
   const interest = acc.movements
     .filter(mov => mov > 0)
@@ -126,7 +126,7 @@ const calcDisplaySummary = function (acc) {
       return int >= 1;
     })
     .reduce((acc, int) => acc + int, 0);
-  labelSumInterest.textContent = `${interest}€`;
+  labelSumInterest.textContent = `${interest.toFixed(2)}€`;
 };
 
 const createUsernames = function (accs) {
@@ -206,7 +206,7 @@ btnTransfer.addEventListener('click', function (e) {
 btnLoan.addEventListener('click', function (e) {
   e.preventDefault();
 
-  const amount = Number(inputLoanAmount.value);
+  const amount = Math.floor(inputLoanAmount.value);
 
   if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
     // Add movement
@@ -251,3 +251,68 @@ btnSort.addEventListener('click', function (e) {
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
+
+const bigIntNumber = 23566543n;
+console.log(typeof bigIntNumber); // bigint
+
+// no mixing
+
+// console.log(23 + 15n); // TypeError: Cannot mix BigInt and other types, use explicit conversions
+
+// no math calculation like sqrt and so on - it is basically designed for storing very big numbers
+
+console.log(Number.MAX_SAFE_INTEGER); // 9007199254740991 - the maximum safe integer in js
+
+// then big int was created
+
+const huge = 2345674334567876543234567654321234565432n;
+console.log(huge); // ok
+
+// convert to bigint
+
+const bigNum = BigInt(23456763333);
+// it will be converted to string
+
+console.log(huge + ' is really big'); // 2345674334567876543234567654321234565432 is really big - n is going to be removed
+
+// numeric separator
+
+const million = 1_000_000;
+console.log(million); // in js _ is ignored - 1000000
+
+// but converting to number won't work
+
+console.log(Number('1_000_000')); // NaN - should not use as string value - just as number presented in code
+console.log(Number(1_000_000)); // 1000000 - this works fine
+
+// remainder operator
+
+const isEven = num => num % 2 === 0;
+const isOdd = num => num % 2 !== 0;
+
+// color every third row
+
+// document.querySelector('body').addEventListener('click', () => {
+//   const movements = document.querySelectorAll('.movements__row');
+//   [...movements].forEach((mov, i) => {
+//     if (i % 3 === 0) mov.style.backgroundColor = 'blue';
+//   });
+// });
+
+// Math rounding
+
+const randomInt = (min, max) =>
+  Math.floor(Math.round() * (max - min + 1)) + min;
+
+// better to use Math.floor than Math.trunc - because correct behavior on negative numbers
+
+// Math min and max functions
+
+Math.min(12, 4, 68, 2, 1);
+Math.max(...[12, 4, 68, 2, 1]); // if we want to pass an array we need to spread it as single arguments
+
+// toFixed is very cool to always present a number with .00 two decimals for example - it returns a string!
+
+console.log((1.4556666).toFixed(2)); // 1.46 - it also does the natural math rounding
+console.log((1).toFixed(2)); // 1.00
+console.log((1.8333).toFixed()); // 2 - without arguments it leave just the integer - but rounds of course
