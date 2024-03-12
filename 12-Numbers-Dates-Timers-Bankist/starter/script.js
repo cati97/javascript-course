@@ -316,3 +316,25 @@ Math.max(...[12, 4, 68, 2, 1]); // if we want to pass an array we need to spread
 console.log((1.4556666).toFixed(2)); // 1.46 - it also does the natural math rounding
 console.log((1).toFixed(2)); // 1.00
 console.log((1.8333).toFixed()); // 2 - without arguments it leave just the integer - but rounds of course
+
+// dates
+
+const now = new Date(); // Tue Mar 12 2024 11:10:24 GMT+0100 (czas środkowoeuropejski standardowy)
+const nowInMilliseconds = Date.now();
+console.log(now);
+console.log(nowInMilliseconds); //1710238038959
+console.log(new Date(nowInMilliseconds)); // same as now
+
+console.log(new Date(2022, 8, 2)); // months are 0 based! - 8 is actually September - 9th month
+console.log(now.getFullYear());
+console.log(now.getMonth()); // 2 - although it is march 3 !!!
+console.log(now.getDate()); // date is actually day! - returns 12
+console.log(now.getDay()); // day is actually the day of the week!
+console.log(now.getHours());
+console.log(now.getMinutes());
+console.log(now.getSeconds());
+
+console.log(now.toISOString()); // very useful method - international standard of representing and storing dates - 2024-03-12T10:12:24.971Z
+
+now.setFullYear(2025); //Wed Mar 12 2025 11:13:26 GMT+0100 (czas środkowoeuropejski standardowy)
+console.log(now);
