@@ -348,7 +348,8 @@ const fakeLogIn = () => {
 fakeLogIn();
 
 function addLeadingZero(date) {
-  return date < 10 ? `0${date}` : date;
+  // return date < 10 ? `0${date}` : date;
+  return `${date}`.padStart(2, '0'); // better to use method to padStart always 2 digits
 }
 
 function formatDate(date) {
