@@ -190,7 +190,7 @@ const updateUI = function (acc) {
 
 ///////////////////////////////////////
 // Event handlers
-let currentAccount;
+let currentAccount, timer;
 
 btnLogin.addEventListener('click', function (e) {
   // Prevent form from submitting
@@ -202,7 +202,8 @@ btnLogin.addEventListener('click', function (e) {
   console.log(currentAccount);
 
   if (currentAccount?.pin === Number(inputLoginPin.value)) {
-    startTimer();
+    if (timer) clearInterval(timer); // if there is already a timer - clear it
+    timer = startTimer(); // assign new timer for the first time
     // Display UI and message
     labelWelcome.textContent = `Welcome back, ${
       currentAccount.owner.split(' ')[0]
@@ -243,6 +244,10 @@ btnTransfer.addEventListener('click', function (e) {
 
     // Update UI
     updateUI(currentAccount);
+
+    // reset timer - it should track inactivity
+    clearInterval(timer);
+    timer = startTimer();
   }
 });
 
@@ -259,6 +264,10 @@ btnLoan.addEventListener('click', function (e) {
 
       // Update UI
       updateUI(currentAccount);
+
+      // reset timer - it should track inactivity
+      clearInterval(timer);
+      timer = startTimer();
     }, 3000); // imitating to wait for bank approval for loan
   }
   inputLoanAmount.value = '';
@@ -392,7 +401,7 @@ const fakeLogIn = () => {
   containerApp.style.opacity = 100;
   setCurrentDate();
 };
-fakeLogIn();
+// fakeLogIn();
 
 function addLeadingZero(date) {
   // return date < 10 ? `0${date}` : date;
@@ -549,18 +558,22 @@ const logOutUser = () => {
 };
 
 function startTimer() {
-  let remainingTime = minutesToMilliseconds(10);
+  let remainingTimeInMilliseconds = minutesToMilliseconds(10);
 
-  setInterval(() => {
-    remainingTime -= 1000;
+  const clockTick = () => {
     const clock = new Intl.DateTimeFormat('pl-PL', {
       minute: 'numeric',
       second: 'numeric',
-    }).format(remainingTime);
+    }).format(remainingTimeInMilliseconds);
     labelTimer.textContent = clock;
-  }, 1000);
+    if (remainingTimeInMilliseconds === 0) {
+      logOutUser();
+      clearInterval(remainingTimeInterval); // stop the timer
+    }
+    remainingTimeInMilliseconds -= 1000;
+  };
 
-  setTimeout(() => {
-    logOutUser();
-  }, minutesToMilliseconds(10));
+  clockTick(); // we need to also call it immediately not only after 1 second
+  const timer = setInterval(clockTick, 1000);
+  return timer;
 }
