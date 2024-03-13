@@ -81,19 +81,23 @@ const inputClosePin = document.querySelector('.form__input--pin');
 /////////////////////////////////////////////////
 // Functions
 
-const displayMovements = function (movements, sort = false) {
+const displayMovements = function (account, sort = false) {
   containerMovements.innerHTML = '';
 
-  const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
+  const movs = sort
+    ? account.movements.slice().sort((a, b) => a - b)
+    : account.movements;
 
   movs.forEach(function (mov, i) {
     const type = mov > 0 ? 'deposit' : 'withdrawal';
+    const date = formatDate(new Date(account.movementsDates[i]));
 
     const html = `
       <div class="movements__row">
         <div class="movements__type movements__type--${type}">${
       i + 1
     } ${type}</div>
+        <div class="movements__date">${date}</div>
         <div class="movements__value">${mov.toFixed(2)}€</div>
       </div>
     `;
@@ -142,7 +146,7 @@ createUsernames(accounts);
 
 const updateUI = function (acc) {
   // Display movements
-  displayMovements(acc.movements);
+  displayMovements(acc);
 
   // Display balance
   calcDisplayBalance(acc);
@@ -170,6 +174,7 @@ btnLogin.addEventListener('click', function (e) {
       currentAccount.owner.split(' ')[0]
     }`;
     containerApp.style.opacity = 100;
+    setCurrentDate();
 
     // Clear input fields
     inputLoginUsername.value = inputLoginPin.value = '';
@@ -198,6 +203,10 @@ btnTransfer.addEventListener('click', function (e) {
     currentAccount.movements.push(-amount);
     receiverAcc.movements.push(amount);
 
+    // Add transfer dates
+    currentAccount.movementsDates.push(new Date().toISOString());
+    receiverAcc.movementsDates.push(new Date().toISOString());
+
     // Update UI
     updateUI(currentAccount);
   }
@@ -211,6 +220,7 @@ btnLoan.addEventListener('click', function (e) {
   if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
     // Add movement
     currentAccount.movements.push(amount);
+    currentAccount.movementsDates.push(new Date().toISOString());
 
     // Update UI
     updateUI(currentAccount);
@@ -244,7 +254,7 @@ btnClose.addEventListener('click', function (e) {
 let sorted = false;
 btnSort.addEventListener('click', function (e) {
   e.preventDefault();
-  displayMovements(currentAccount.movements, !sorted);
+  displayMovements(currentAccount, !sorted);
   sorted = !sorted;
 });
 
@@ -344,6 +354,7 @@ const fakeLogIn = () => {
   currentAccount = account1;
   updateUI(currentAccount);
   containerApp.style.opacity = 100;
+  setCurrentDate();
 };
 fakeLogIn();
 
@@ -352,21 +363,23 @@ function addLeadingZero(date) {
   return `${date}`.padStart(2, '0'); // better to use method to padStart always 2 digits
 }
 
-function formatDate(date) {
+function formatDate(date, withTime = false) {
   const day = date.getDate();
   const month = date.getMonth() + 1; // Months are zero-indexed, so add 1
   const year = date.getFullYear();
   const hours = date.getHours();
   const minutes = date.getMinutes();
 
-  return `${addLeadingZero(day)}/${addLeadingZero(
+  const formattedDate = `${addLeadingZero(day)}/${addLeadingZero(
     month
-  )}/${year}, ${addLeadingZero(hours)}:${addLeadingZero(minutes)}`;
+  )}/${year}`;
+
+  const formattedTime = `${addLeadingZero(hours)}:${addLeadingZero(minutes)}`;
+
+  return `${formattedDate}${withTime ? `, ${formattedTime}` : ''}`;
 }
 
-const setCurrentDate = () => {
+function setCurrentDate() {
   const now = new Date();
-  labelDate.textContent = formatDate(now);
-};
-
-setCurrentDate();
+  labelDate.textContent = formatDate(now, true);
+}
