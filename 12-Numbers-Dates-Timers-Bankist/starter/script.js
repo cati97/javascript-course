@@ -251,12 +251,14 @@ btnLoan.addEventListener('click', function (e) {
   const amount = Math.floor(inputLoanAmount.value);
 
   if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
-    // Add movement
-    currentAccount.movements.push(amount);
-    currentAccount.movementsDates.push(new Date().toISOString());
+    setTimeout(() => {
+      // Add movement
+      currentAccount.movements.push(amount);
+      currentAccount.movementsDates.push(new Date().toISOString());
 
-    // Update UI
-    updateUI(currentAccount);
+      // Update UI
+      updateUI(currentAccount);
+    }, 3000); // imitating to wait for bank approval for loan
   }
   inputLoanAmount.value = '';
 });
@@ -499,3 +501,40 @@ function formatToLocalCurrency(value, locale, currency) {
     currency: currency,
   }).format(value);
 }
+
+// setTimeout - callback to be executed ONCE after some time
+
+const ingredients = ['olives', 'spinach'];
+
+const pizzaTimer = setTimeout(
+  (ing1, ing2) => {
+    console.log(`Here is your pizza with ${ing1} and ${ing2}`);
+  },
+  3000,
+  ...ingredients
+); // no need to call pizzaTimer or nothing - it is only saved to a variable in order to have a reference to it to clear it
+
+if (ingredients.includes('spinach')) {
+  clearTimeout(pizzaTimer);
+}
+
+// setInterval - callback to be executed EVERY e.g. 5 seconds and so on
+
+// setInterval(() => {
+//   const now = new Date();
+//   const clock = new Intl.DateTimeFormat('pl-PL', {
+//     hour: 'numeric',
+//     minute: 'numeric',
+//     second: 'numeric',
+//   }).format(now);
+//   console.log(clock);
+// }, 1000);
+
+// 17:45:23
+// script.js:528 17:45:24
+// script.js:528 17:45:25
+
+/* Wed Mar 13 2024 17:43:43 GMT+0100 (czas środkowoeuropejski standardowy)
+script.js:523 Wed Mar 13 2024 17:43:44 GMT+0100 (czas środkowoeuropejski standardowy)
+script.js:523 Wed Mar 13 2024 17:43:45 GMT+0100 (czas środkowoeuropejski standardowy)
+*/
