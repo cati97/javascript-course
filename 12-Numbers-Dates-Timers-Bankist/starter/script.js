@@ -22,8 +22,8 @@ const account1 = {
     '2020-04-01T10:17:24.185Z',
     '2020-05-08T14:11:59.604Z',
     '2020-05-27T17:01:17.194Z',
-    '2020-07-11T23:36:17.929Z',
-    '2020-07-12T10:51:36.790Z',
+    '2024-03-09T23:36:17.929Z',
+    '2024-03-12T10:51:36.790Z',
   ],
   currency: 'EUR',
   locale: 'pt-PT', // de-DE
@@ -91,13 +91,25 @@ const displayMovements = function (account, sort = false) {
   movs.forEach(function (mov, i) {
     const type = mov > 0 ? 'deposit' : 'withdrawal';
     const date = formatDate(new Date(account.movementsDates[i]));
+    const daysPassed = calcDaysPassed(
+      new Date(),
+      new Date(account.movementsDates[i])
+    );
+    const daysPassedString =
+      daysPassed === 0
+        ? 'Today'
+        : daysPassed === 1
+        ? 'Yesterday'
+        : daysPassed <= 7
+        ? `${daysPassed} days ago`
+        : date;
 
     const html = `
       <div class="movements__row">
         <div class="movements__type movements__type--${type}">${
       i + 1
     } ${type}</div>
-        <div class="movements__date">${date}</div>
+        <div class="movements__date">${daysPassedString}</div>
         <div class="movements__value">${mov.toFixed(2)}€</div>
       </div>
     `;
@@ -383,3 +395,17 @@ function setCurrentDate() {
   const now = new Date();
   labelDate.textContent = formatDate(now, true);
 }
+
+// how to get milliseconds from Date object? - simply convert to a Number
+
+console.log(now); // Wed Mar 13 2024 12:48:57 GMT+0100 (czas środkowoeuropejski standardowy)
+console.log(Number(now)); // 1710330537381
+
+// we can do math operations on dates without explicitly converting them to numbers so
+console.log(new Date() - new Date(2024, 3, 23)); // -3490230634
+
+function calcDaysPassed(date1, date2) {
+  return Math.round(Math.abs(date1 - date2) / (1000 * 60 * 60 * 24));
+}
+
+console.log(calcDaysPassed(new Date(), new Date(2024, 2, 23))); // 9
