@@ -90,7 +90,8 @@ const displayMovements = function (account, sort = false) {
 
   movs.forEach(function (mov, i) {
     const type = mov > 0 ? 'deposit' : 'withdrawal';
-    const date = formatDate(new Date(account.movementsDates[i]));
+    const movementDate = new Date(account.movementsDates[i]);
+    const date = formatToLocalDate(movementDate, account.locale); // no options defined means it will just be a date day, month, year
     const daysPassed = calcDaysPassed(
       new Date(),
       new Date(account.movementsDates[i])
@@ -391,9 +392,25 @@ function formatDate(date, withTime = false) {
   return `${formattedDate}${withTime ? `, ${formattedTime}` : ''}`;
 }
 
+function formatToLocalDate(date, locale, options) {
+  const localDate = new Intl.DateTimeFormat(locale, options).format(date);
+  return localDate;
+}
+
 function setCurrentDate() {
   const now = new Date();
-  labelDate.textContent = formatDate(now, true);
+  const options = {
+    hour: 'numeric',
+    minute: 'numeric',
+    day: 'numeric',
+    month: 'numeric',
+    year: 'numeric',
+  };
+  labelDate.textContent = formatToLocalDate(
+    now,
+    currentAccount.locale,
+    options
+  );
 }
 
 // how to get milliseconds from Date object? - simply convert to a Number
@@ -409,3 +426,41 @@ function calcDaysPassed(date1, date2) {
 }
 
 console.log(calcDaysPassed(new Date(), new Date(2024, 2, 23))); // 9
+
+const options = {
+  hour: 'numeric',
+  minute: 'numeric',
+  day: 'numeric',
+  month: 'long',
+  year: '2-digit',
+  weekday: 'long', // środa, 13 marca 24 15:47
+  // weekday: 'short', // śr., 13 marca 24 15:47
+};
+
+const polishDate = new Intl.DateTimeFormat('pl-PL', options).format(new Date()); // środa, 13 marca 24 15:47
+console.log(polishDate); // 13.03.2024
+
+const usaDate = new Intl.DateTimeFormat('en-US').format(new Date());
+console.log(usaDate); // 3/13/2024
+
+const spanishDate = new Intl.DateTimeFormat('es-ES').format(new Date());
+console.log(spanishDate); // 13/3/2024
+
+// Number to be formatted
+const number = 1234567.89;
+
+// Format number according to the locale 'en-US' (United States)
+const formattedNumberUS = new Intl.NumberFormat('en-US').format(number);
+console.log(formattedNumberUS); // Output: "1,234,567.89"
+
+// Format number according to the locale 'fr-FR' (France)
+const formattedNumberFR = new Intl.NumberFormat('fr-FR').format(number);
+console.log(formattedNumberFR); // Output: "1 234 567,89" (Note: French uses non-breaking space as a separator)
+
+const formattedNumberPL = new Intl.NumberFormat('pl-PL').format(number);
+console.log(formattedNumberPL); // Output: 1 234 567,89
+
+// how to get the browser language!
+
+const locale = navigator.language; // same as window.navigator.language
+console.log(locale); // pl-PL
