@@ -336,5 +336,36 @@ console.log(now.getSeconds());
 
 console.log(now.toISOString()); // very useful method - international standard of representing and storing dates - 2024-03-12T10:12:24.971Z
 
-now.setFullYear(2025); //Wed Mar 12 2025 11:13:26 GMT+0100 (czas środkowoeuropejski standardowy)
-console.log(now);
+// now.setFullYear(2025); //Wed Mar 12 2025 11:13:26 GMT+0100 (czas środkowoeuropejski standardowy)
+// console.log(now);
+
+// fake user always logged in
+const fakeLogIn = () => {
+  currentAccount = account1;
+  updateUI(currentAccount);
+  containerApp.style.opacity = 100;
+};
+fakeLogIn();
+
+function addLeadingZero(date) {
+  return date < 10 ? `0${date}` : date;
+}
+
+function formatDate(date) {
+  const day = date.getDate();
+  const month = date.getMonth() + 1; // Months are zero-indexed, so add 1
+  const year = date.getFullYear();
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+
+  return `${addLeadingZero(day)}/${addLeadingZero(
+    month
+  )}/${year}, ${addLeadingZero(hours)}:${addLeadingZero(minutes)}`;
+}
+
+const setCurrentDate = () => {
+  const now = new Date();
+  labelDate.textContent = formatDate(now);
+};
+
+setCurrentDate();
