@@ -202,6 +202,7 @@ btnLogin.addEventListener('click', function (e) {
   console.log(currentAccount);
 
   if (currentAccount?.pin === Number(inputLoginPin.value)) {
+    startTimer();
     // Display UI and message
     labelWelcome.textContent = `Welcome back, ${
       currentAccount.owner.split(' ')[0]
@@ -538,3 +539,28 @@ if (ingredients.includes('spinach')) {
 script.js:523 Wed Mar 13 2024 17:43:44 GMT+0100 (czas środkowoeuropejski standardowy)
 script.js:523 Wed Mar 13 2024 17:43:45 GMT+0100 (czas środkowoeuropejski standardowy)
 */
+
+const minutesToMilliseconds = timeInMinutes => timeInMinutes * 60 * 1000;
+
+const logOutUser = () => {
+  currentAccount = undefined;
+  containerApp.style.opacity = 0;
+  labelWelcome.textContent = 'Log in to get started';
+};
+
+function startTimer() {
+  let remainingTime = minutesToMilliseconds(10);
+
+  setInterval(() => {
+    remainingTime -= 1000;
+    const clock = new Intl.DateTimeFormat('pl-PL', {
+      minute: 'numeric',
+      second: 'numeric',
+    }).format(remainingTime);
+    labelTimer.textContent = clock;
+  }, 1000);
+
+  setTimeout(() => {
+    logOutUser();
+  }, minutesToMilliseconds(10));
+}
