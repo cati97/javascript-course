@@ -30,3 +30,34 @@ document.addEventListener('keydown', function (e) {
     closeModal();
   }
 });
+
+console.log(document.getElementById('section--1')); // no need to add hash # because method already says by Id - id is unique so it select only one element
+console.log(document.getElementsByClassName('section')); // without the dot!
+
+// it returns a live HTMLCollection which updates automatically compared to NodeList if we remove or add something
+
+// HTMLCollection(4) [section#section--1.section,
+// section#section--2.section, section#section--3.section, section.section.section--sign-up, section--1: section#section--1.section,
+// section--2: section#section--2.section, section--3: section#section--3.section]
+document.getElementById('section--1').remove();
+
+console.log(document.getElementsByClassName('section')); // after removing it is 3 - but you must console.log again - it doesn't just happen!
+
+const cookieMessage = document.createElement('div');
+cookieMessage.classList.add('cookie-message');
+cookieMessage.innerHTML = `We are using cookies.<button class='btn btn--close-cookie'>Got it!</button>`;
+
+const header = document.querySelector('.header');
+header.append(cookieMessage); // adds as the last child of header
+// header.prepend(cookieMessage); // adds as the first child of header
+// header.before(cookieMessage); // adds as sibling before header
+// header.after(cookieMessage); // adds as sibling after header - overwriting would execute only once the last statement!
+
+// if we actually want in more than one place to add element
+
+// header.before(cookieMessage.cloneNode(true)); // cloning is done on node that needs to be cloned and true means clone with all children
+
+document.querySelector('.btn--close-cookie').addEventListener('click', () => {
+  cookieMessage.remove(); // new method
+  // cookieMessage.parentElement.removeChild(cookieMessage); // this was before new method remove()
+});
