@@ -39,7 +39,7 @@ console.log(document.getElementsByClassName('section')); // without the dot!
 // HTMLCollection(4) [section#section--1.section,
 // section#section--2.section, section#section--3.section, section.section.section--sign-up, section--1: section#section--1.section,
 // section--2: section#section--2.section, section--3: section#section--3.section]
-document.getElementById('section--1').remove();
+//document.getElementById('section--1').remove();
 
 console.log(document.getElementsByClassName('section')); // after removing it is 3 - but you must console.log again - it doesn't just happen!
 
@@ -145,3 +145,30 @@ logo.classList.add('c'); // we can also add multiple class names .add('c', 'b')
 logo.classList.remove('c');
 logo.classList.toggle('c'); // if there is a 'c' class remove it, if there is no 'c' class add it
 logo.classList.contains('c'); // not includes as in js!
+
+// scrolling
+const btnScrollTo = document.querySelector('.btn--scroll-to');
+const section1 = document.querySelector('#section--1');
+
+btnScrollTo.addEventListener('click', e => {
+  // deprecated window.pageXOffset, pageYOffset - still works
+  console.log(scrollX, scrollY); // at the top 0 0, scrolling down a little bit 0 240
+  console.log(document.documentElement.clientWidth); // 2031 - on 100% zoom
+  console.log(document.documentElement.clientHeight); // 983 - on 1000% zoom
+
+  // html element coords
+  console.log(e.target.getBoundingClientRect());
+  console.log(section1.getBoundingClientRect());
+
+  const { left, top } = section1.getBoundingClientRect();
+
+  // modern easy way of scrolling without specifying the coors
+  section1.scrollIntoView({ behavior: 'smooth' });
+
+  // old way
+  // window.scrollTo({
+  //   left: left + scrollX,
+  //   top: top + scrollY,
+  //   behavior: 'smooth',
+  // });
+});
