@@ -172,3 +172,55 @@ btnScrollTo.addEventListener('click', e => {
   //   behavior: 'smooth',
   // });
 });
+
+// event propagation - event first goes up to the root than is captured as going down to the target element, then the bubbling phase going through all parent elements
+
+const randomInt = (min, max) => Math.floor(Math.random() * (max - min + 1) + 1);
+const randomColor = () =>
+  `rgb(${randomInt(0, 255)},${randomInt(0, 255)},${randomInt(0, 255)})`;
+console.log(randomColor());
+
+// document.querySelector('.nav__link').addEventListener('click', function (e) {
+//   console.log(this); // <a class="nav__link" href="#section--1">Features</a> - we cannot use arrow function because then this points to window object!
+//   console.log(e.currentTarget); // <a class="nav__link" href="#section--1">Features</a>
+//   console.log(this === e.currentTarget); // true
+//   console.log(e.target); // this is the origin of the event - where it was actually clicked first
+//   this.style.backgroundColor = randomColor();
+//   //e.stopPropagation(); // if we do this the event won't travel up to the parent elements - but it is not advised to do!
+// });
+
+// // when I click on nav__link - all its parents are also going to react to this event
+// document.querySelector('.nav__links').addEventListener('click', function (e) {
+//   console.log(e.currentTarget); // <a class="nav__link" href="#section--1">Features</a>
+//   console.log(e.target); // this is the origin of the event - where it was actually clicked first
+//   this.style.backgroundColor = randomColor();
+// });
+
+// document.querySelector('.nav').addEventListener('click', function (e) {
+//   console.log(e.currentTarget); // <a class="nav__link" href="#section--1">Features</a>
+//   console.log(e.target); // this is the origin of the event - where it was actually clicked first
+//   this.style.backgroundColor = randomColor();
+// });
+
+// the easy way - add event listener with for each - less performance
+// document.querySelectorAll('.nav__link').forEach(el => {
+//   el.addEventListener('click', function (e) {
+//     e.preventDefault(); // prevent auto scroll into the element that contains this id
+//     const id = this.getAttribute('href');
+//     console.log(id);
+//     document.querySelector(id).scrollIntoView({ behavior: 'smooth' });
+//   });
+// });
+
+// do event delegation instead
+// select the parent element
+// add event listener on e.target - so where exactly the click happened
+
+document.querySelector('.nav__links').addEventListener('click', function (e) {
+  e.preventDefault();
+  // if the origin of the click happened in one of the links - child of nav_links container
+  if (e.target.classList.contains('nav__link')) {
+    const id = e.target.getAttribute('href');
+    document.querySelector(id).scrollIntoView({ behavior: 'smooth' });
+  }
+});
