@@ -45,7 +45,7 @@ console.log(document.getElementsByClassName('section')); // after removing it is
 
 const cookieMessage = document.createElement('div');
 cookieMessage.classList.add('cookie-message');
-cookieMessage.innerHTML = `We are using cookies.<button class='btn btn--close-cookie'>Got it!</button>`;
+cookieMessage.innerHTML = `We are using cookies for improved functionality and analytics.<button class='btn btn--close-cookie'>Got it!</button>`;
 
 const header = document.querySelector('.header');
 header.append(cookieMessage); // adds as the last child of header
@@ -61,3 +61,87 @@ document.querySelector('.btn--close-cookie').addEventListener('click', () => {
   cookieMessage.remove(); // new method
   // cookieMessage.parentElement.removeChild(cookieMessage); // this was before new method remove()
 });
+
+cookieMessage.style.backgroundColor = '#37383d';
+
+// we can only access inline styles like this
+console.log(cookieMessage.style.backgroundColor); // rgb(55, 56, 61)
+
+// styles from css we access like this
+console.log(getComputedStyle(cookieMessage).color); // rgb(187, 187, 187)
+
+// getComputedStyle can be also used to access automatically computed styles by the browser - e.g. height
+
+// we need to parseFloat because getComputedStyle .height returns a string like 30px
+
+cookieMessage.style.height =
+  parseFloat(getComputedStyle(cookieMessage).height) + 30 + 'px';
+
+// document.documentElement - returns the entire HTML as object
+console.log(document.documentElement);
+
+// in css
+
+// :root { // means attached to root element - document.documentElement
+//   --color-primary: #5ec576;
+//   --color-secondary: #ffcb03;
+
+// }
+// document.documentElement.style.setProperty('--color-primary', 'blue');
+
+// how to access and modify attributes ?
+
+{
+  /* <img
+src="img/logo.png"
+alt="Bankist logo"
+class="nav__logo"
+id="logo"
+designer="Jonas"
+data-testid="logo"
+data-release-version="2.3"
+/> */
+}
+
+const logo = document.getElementById('logo');
+console.log(logo.alt); // Bankist logo
+console.log(logo.src); // http://127.0.0.1:5500/13-Advanced-DOM-Bankist/starter/img/logo.png - this is always absolute path
+
+// how to get the real value of src
+
+console.log(logo.getAttribute('src')); // img/logo.png - this is the actual value set in html
+
+// how to read a custom attribute added to html element?
+console.log(logo.designer); // undefined - not like that
+
+console.log(logo.getAttribute('designer')); // Jonas - like that
+
+// how to read data- attributes
+
+console.log(logo.dataset); // DOMStringMap {testid: 'logo', releaseVersion: '2.3'} // in dataset there will be all attributes starting with data-, all in camelCase
+console.log(logo.dataset.testid); // logo
+console.log(logo.dataset.releaseVersion); // 2.3
+
+// how to get the class attribute - not class but className
+
+console.log(logo.className); //nav__logo
+console.log(logo.id); // logo
+
+// how to create new attributes?
+
+logo.setAttribute('size', '1920x1080');
+
+/* <img src="img/logo.png" alt="Bankist logo" class="nav__logo" id="logo" designer="Jonas" data-testid="logo" data-release-version="2.3" size="1920x1080"></img> */
+
+// relative vs absolute path also in href
+
+const link = document.querySelector('.nav__link');
+console.log(link.href); // http://127.0.0.1:5500/13-Advanced-DOM-Bankist/starter/index.html#section--1 - absolute
+console.log(link.getAttribute('href')); // #section--1 - relative
+
+// classes
+
+logo.classList.add('c'); // we can also add multiple class names .add('c', 'b')
+logo.classList.remove('c');
+logo.classList.toggle('c'); // if there is a 'c' class remove it, if there is no 'c' class add it
+logo.classList.contains('c'); // not includes as in js!
