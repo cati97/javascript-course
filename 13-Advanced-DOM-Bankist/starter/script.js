@@ -224,3 +224,41 @@ document.querySelector('.nav__links').addEventListener('click', function (e) {
     document.querySelector(id).scrollIntoView({ behavior: 'smooth' });
   }
 });
+const h1 = document.querySelector('h1');
+console.log(h1.closest('.header'));
+console.log(h1.firstElementChild);
+
+// how to get all the siblings ?
+// trick to get the children of the parentElement
+// but it also includes the element itself
+console.log(h1.parentElement.children); // HTMLCollection does not have forEach!
+
+// tab element
+
+const tabs = document.querySelectorAll('.operations__tab');
+const tabsContainer = document.querySelector('.operations__tab-container');
+const tabsContent = document.querySelectorAll('.operations__content');
+
+tabsContainer.addEventListener('click', function (e) {
+  const clickedBtn = e.target.closest('button'); // or closest(.operations__tab)
+  // Guard Clause - modern way to exist a function early - otherwise keep going
+  if (!clickedBtn) return;
+  //clickedBtn.classList.toggle('operations__tab--active'); // add active class to the tab just clicked
+  // but also remove active class from all the other tabs
+  const activeDataId = clickedBtn.dataset.tab;
+  // [...this.children]
+  //   .filter(el => el.dataset.tab !== activeDataId)
+  //   .forEach(sibling => sibling.classList.remove('operations__tab--active'));
+
+  // better way - first remove all active classes from all elements, then just add to one
+  tabs.forEach(tab => tab.classList.remove('operations__tab--active'));
+  clickedBtn.classList.add('operations__tab--active');
+
+  const clickedTabContent = document.querySelector(
+    `.operations__content--${activeDataId}`
+  );
+  tabsContent.forEach(tab =>
+    tab.classList.remove('operations__content--active')
+  );
+  clickedTabContent.classList.add('operations__content--active');
+});
