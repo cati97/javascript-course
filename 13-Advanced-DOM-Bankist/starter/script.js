@@ -262,3 +262,58 @@ tabsContainer.addEventListener('click', function (e) {
   );
   clickedTabContent.classList.add('operations__content--active');
 });
+
+// change opacity on link hover
+
+const nav = document.querySelector('.nav');
+console.log(nav);
+
+const handleHoverNavLink = function (e) {
+  // this keyword after binding is the 'argument'
+  if (e.target.classList.contains('nav__link')) {
+    const link = e.target;
+    const logo = link.closest('.nav').querySelector('img');
+    const siblings = link.closest('.nav').querySelectorAll('.nav__link');
+    logo.style.opacity = this;
+    siblings.forEach(el => {
+      if (el !== link) el.style.opacity = this;
+    });
+  }
+};
+
+// nav.addEventListener('mouseover', function (e) {
+//   console.log(e.target); // e.target can be many things depending on what exactly we are hovering over
+//   if (e.target.classList.contains('nav__link')) {
+//     const link = e.target;
+//     // how to get all siblings - go to the common parent and find all links
+//     const siblings = link.closest('.nav').querySelectorAll('.nav__link');
+//     console.log('siblings', siblings);
+
+//     // we want all siblings to have less opacity
+//     siblings.forEach(el => {
+//       // apply to all siblings not to the element itself
+//       if (el !== link) el.style.opacity = 0.5;
+//     });
+
+//     // and the logo
+//     const logo = link.closest('.nav').querySelector('img');
+//     // const logo = document.querySelector('img'); this would be too generic and would affect all img on the page
+//     // const logo = nav.querySelector('img'); this would also work
+//     // const logo = this.querySelector('img'); this also works as this it bound to nav - the element that the addEventListener was attached to
+//     logo.style.opacity = 0.5;
+//   }
+// });
+
+// this would work but there is a better cleaner solution
+// nav.addEventListener('mouseover', e => {
+//   handleHoverNavLink(e, 0.5);
+// });
+// nav.addEventListener('mouseout', e => {
+//   handleHoverNavLink(e, 1);
+// });
+
+nav.addEventListener('mouseover', handleHoverNavLink.bind(0.5));
+nav.addEventListener('mouseout', handleHoverNavLink.bind(1));
+
+// bind returns a new function with the same body but different this reference - what we specify in parameter
+// we could also pass an object or an array as this
