@@ -398,3 +398,84 @@ const imgObserver = new IntersectionObserver(loadImg, {
 });
 
 lazyImages.forEach(img => imgObserver.observe(img));
+
+// slider
+
+const slider = () => {
+  const slides = document.querySelectorAll('.slide');
+  const btnLeft = document.querySelector('.slider__btn--left');
+  const btnRight = document.querySelector('.slider__btn--right');
+  const dotsContainer = document.querySelector('.dots');
+
+  let currSlide = 0;
+  const maxSlide = slides.length - 1;
+
+  const activateDot = slide => {
+    document.querySelectorAll('.dots__dot').forEach(dot => {
+      dot.classList.remove('dots__dot--active');
+    });
+    const currSlide = document.querySelector(
+      `.dots__dot[data-slide="${slide}"`
+    );
+    currSlide.classList.add('dots__dot--active');
+  };
+
+  const goToSlide = slide => {
+    slides.forEach((s, i) => {
+      s.style.transform = `translateX(${(i - slide) * 100}%)`;
+    });
+    activateDot(slide);
+  };
+
+  const nextSlide = () => {
+    if (currSlide < maxSlide) {
+      currSlide++;
+    } else {
+      currSlide = 0;
+    }
+    goToSlide(currSlide);
+  };
+
+  const prevSlide = () => {
+    if (currSlide === 0) {
+      currSlide = maxSlide;
+    } else {
+      currSlide--;
+    }
+    goToSlide(currSlide);
+  };
+
+  const createDots = () => {
+    slides.forEach((_, i) => {
+      dotsContainer.insertAdjacentHTML(
+        'beforeend',
+        `<button class='dots__dot' data-slide="${i}"></button>`
+      );
+    });
+  };
+
+  // event handlers
+  btnRight.addEventListener('click', nextSlide);
+  btnLeft.addEventListener('click', prevSlide);
+
+  document.addEventListener('keydown', e => {
+    e.key === 'ArrowRight' && nextSlide();
+    e.key === 'ArrowLeft' && prevSlide(); // same as regular if statement
+  });
+
+  dotsContainer.addEventListener('click', e => {
+    if (e.target.classList.contains('dots__dot')) {
+      const { slide } = e.target.dataset;
+      goToSlide(slide);
+    }
+  });
+
+  const init = () => {
+    createDots();
+    goToSlide(0);
+  };
+
+  init();
+};
+
+slider();
