@@ -373,3 +373,28 @@ sections.forEach(section => {
   section.classList.add('section--hidden');
   sectionObserver.observe(section);
 });
+
+// lazy loading images
+
+const lazyImages = document.querySelectorAll('img[data-src]'); // all img with attribute data-src
+
+const loadImg = (entries, observer) => {
+  const [entry] = entries;
+  if (!entry.isIntersecting) return;
+  const img = entry.target;
+  img.src = img.dataset.src;
+
+  img.addEventListener('load', () => {
+    // only remove the blur filter when the img has finished loading
+    img.classList.remove('lazy-img');
+  });
+  observer.unobserve(img);
+};
+
+const imgObserver = new IntersectionObserver(loadImg, {
+  root: null,
+  threshold: 0,
+  rootMargin: '200px', // before the img appears - so the users won't notice the blurry image
+});
+
+lazyImages.forEach(img => imgObserver.observe(img));
