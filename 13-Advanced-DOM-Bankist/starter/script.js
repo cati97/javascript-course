@@ -43,12 +43,12 @@ console.log(document.getElementsByClassName('section')); // without the dot!
 
 console.log(document.getElementsByClassName('section')); // after removing it is 3 - but you must console.log again - it doesn't just happen!
 
-const cookieMessage = document.createElement('div');
-cookieMessage.classList.add('cookie-message');
-cookieMessage.innerHTML = `We are using cookies for improved functionality and analytics.<button class='btn btn--close-cookie'>Got it!</button>`;
+// const cookieMessage = document.createElement('div');
+// cookieMessage.classList.add('cookie-message');
+// cookieMessage.innerHTML = `We are using cookies for improved functionality and analytics.<button class='btn btn--close-cookie'>Got it!</button>`;
 
 const header = document.querySelector('.header');
-header.append(cookieMessage); // adds as the last child of header
+//header.append(cookieMessage); // adds as the last child of header
 // header.prepend(cookieMessage); // adds as the first child of header
 // header.before(cookieMessage); // adds as sibling before header
 // header.after(cookieMessage); // adds as sibling after header - overwriting would execute only once the last statement!
@@ -57,25 +57,25 @@ header.append(cookieMessage); // adds as the last child of header
 
 // header.before(cookieMessage.cloneNode(true)); // cloning is done on node that needs to be cloned and true means clone with all children
 
-document.querySelector('.btn--close-cookie').addEventListener('click', () => {
-  cookieMessage.remove(); // new method
-  // cookieMessage.parentElement.removeChild(cookieMessage); // this was before new method remove()
-});
+// document.querySelector('.btn--close-cookie').addEventListener('click', () => {
+//   cookieMessage.remove(); // new method
+//   // cookieMessage.parentElement.removeChild(cookieMessage); // this was before new method remove()
+// });
 
-cookieMessage.style.backgroundColor = '#37383d';
+// cookieMessage.style.backgroundColor = '#37383d';
 
 // we can only access inline styles like this
-console.log(cookieMessage.style.backgroundColor); // rgb(55, 56, 61)
+//console.log(cookieMessage.style.backgroundColor); // rgb(55, 56, 61)
 
 // styles from css we access like this
-console.log(getComputedStyle(cookieMessage).color); // rgb(187, 187, 187)
+// console.log(getComputedStyle(cookieMessage).color); // rgb(187, 187, 187)
 
 // getComputedStyle can be also used to access automatically computed styles by the browser - e.g. height
 
 // we need to parseFloat because getComputedStyle .height returns a string like 30px
 
-cookieMessage.style.height =
-  parseFloat(getComputedStyle(cookieMessage).height) + 30 + 'px';
+// cookieMessage.style.height =
+//   parseFloat(getComputedStyle(cookieMessage).height) + 30 + 'px';
 
 // document.documentElement - returns the entire HTML as object
 console.log(document.documentElement);
@@ -317,3 +317,40 @@ nav.addEventListener('mouseout', handleHoverNavLink.bind(1));
 
 // bind returns a new function with the same body but different this reference - what we specify in parameter
 // we could also pass an object or an array as this
+
+// sticky navigation
+
+console.log(window.scrollY);
+console.log(section1);
+
+const section1Coords = section1.getBoundingClientRect();
+
+// this is not a good practice - affecting performance
+// window.addEventListener('scroll', () => {
+//   console.log(window.scrollY);
+//   if (window.scrollY > section1Coords.top) {
+//     nav.classList.add('sticky');
+//   } else {
+//     nav.classList.remove('sticky');
+//   }
+// });
+
+const navHeight = nav.getBoundingClientRect().height;
+
+const observerOptions = {
+  root: null,
+  threshold: 0,
+  rootMargin: `-${navHeight}px`,
+};
+
+const observerCallback = function (entries, observer) {
+  const [entry] = entries;
+  if (!entry.isIntersecting) {
+    nav.classList.add('sticky');
+  } else {
+    nav.classList.remove('sticky');
+  }
+};
+
+const observer = new IntersectionObserver(observerCallback, observerOptions);
+observer.observe(header);
