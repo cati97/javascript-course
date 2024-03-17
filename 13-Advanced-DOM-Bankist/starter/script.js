@@ -354,3 +354,22 @@ const observerCallback = function (entries, observer) {
 
 const observer = new IntersectionObserver(observerCallback, observerOptions);
 observer.observe(header);
+
+const revealSection = (entries, observer) => {
+  const [entry] = entries;
+  if (!entry.isIntersecting) return;
+  entry.target.classList.remove('section--hidden');
+  observer.unobserve(entry.target); // great use of second element observer
+};
+
+const sectionObserver = new IntersectionObserver(revealSection, {
+  root: null,
+  threshold: 0.15,
+});
+
+const sections = document.querySelectorAll('.section');
+
+sections.forEach(section => {
+  section.classList.add('section--hidden');
+  sectionObserver.observe(section);
+});
