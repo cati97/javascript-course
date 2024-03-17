@@ -479,3 +479,24 @@ const slider = () => {
 };
 
 slider();
+
+// happens when HTML is loaded - as we add <script> as last - it is already loaded
+document.addEventListener('DOMContentLoaded', e => {
+  console.log(e);
+});
+
+// when HTML css and all images are loaded
+document.addEventListener('load', e => {
+  console.log(e);
+});
+
+// No longer used - before it was to display alert for the user before he leaves the page
+// document.addEventListener('beforeunload', e => {
+//   e.preventDefault();
+//   e.returnValue = '';
+// });
+
+// HTML parsing means creating HTML elements
+
+// why we put the script tag at the end of the body and not in the head tag?
+// performance issues - HTML parsing will actually stop and wait for the script to load and then continue
