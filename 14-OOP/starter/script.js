@@ -69,3 +69,84 @@ console.log(h1 instanceof Object); // true - html elements are objects in the en
 console.log(anna instanceof Person); // true
 console.log(anna instanceof Object); // true
 console.log(anna instanceof Array); // false
+
+// ES6 Classes
+
+// classes are just functions under the hood so we can also assign them into variables
+const PersonClass = class {};
+
+// class declaration
+class PersonCl {
+  constructor(firstName, birthYear) {
+    this.firstName = firstName;
+    this.birthYear = birthYear;
+  }
+
+  // this will create a method on the .prototype property not on the object itself!
+  calcAge() {
+    console.log(new Date().getFullYear() - this.birthYear);
+  }
+
+  // this creates age() function on prototype property and also age property
+  get age() {
+    return new Date().getFullYear() - this.birthYear;
+  }
+
+  /**
+   * created by vs code
+   * @param {string} name
+   */
+
+  // setter are not functions - they are created like properties
+  // set lastName(name) { // at this point monica.lastName property will be created on the prototype!
+  //   console.log('when is this called?');
+  //   this.lastName = name; // so we cannot do this - because lastName property already exists on the prototype!
+  // }
+
+  set lastName(name) {
+    // the convention to add _ to avoid conflict
+    this._lastName = name;
+  }
+
+  get lastName() {
+    return this._lastName;
+  }
+}
+
+const monica = new PersonCl('Monica', 1997);
+monica.calcAge(); // 27
+
+// this will work exactly like calcAge
+PersonCl.prototype.calcAge2 = function () {
+  console.log(new Date().getFullYear() - this.birthYear);
+};
+
+console.log(monica.age); // since age() is a getter function - we don't call it but use it as a property
+
+// monica.fullName('Davis'); we cannot do this - fullName is not a function - it is also like a property
+monica.lastName = 'Davis';
+console.log(monica); // now monica object has own property _lastName and on the prototype it has property lastName
+// we can access both
+console.log(monica._lastName); // own property
+console.log(monica.hasOwnProperty('_lastName')); // true
+console.log(monica.lastName); // property exists only on the prototype! - we can access it thanks to the getter function get lastName()
+console.log(monica.hasOwnProperty('lastName')); // false
+
+// we can also have getters and setters in object literals
+
+// this under the hood does new Object
+const account = {
+  movements: [1, 2, 3, 4],
+
+  get latest() {
+    return this.movements.slice(-1)[0];
+  }, // we need a comma here because it is an object literal not a class declaration
+
+  set latest(mov) {
+    this.movements.push(mov);
+  },
+};
+
+account.latest = 50;
+console.log(account); // [1, 2, 3, 4, 50]
+console.log(account.latest); // 50
