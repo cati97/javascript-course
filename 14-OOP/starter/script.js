@@ -174,3 +174,23 @@ Person.hey = function () {
 Person.hey();
 
 // in class declaration it is even simpler - just add static keyword before method name
+
+// Object.create() - manually specify a prototype object and link it to the new object
+// no new keyword!
+
+const PersonProto = {
+  calcAge() {
+    console.log(new Date().getFullYear() - this.birthYear);
+  },
+
+  // this is simulating a constructor - but it is just a regular method on object literal - can be called any name
+  init(firstName, birthYear) {
+    this.firstName = firstName; // this is linked to a object that is calling this method - in this case to steven
+    this.birthYear = birthYear;
+  },
+};
+
+const steven = Object.create(PersonProto); // now steven empty {} has a new property __proto__ with our manually created prototype
+console.log(steven.__proto__ === PersonProto); // true
+steven.init('Steven', 1972);
+steven.calcAge(); // 52
