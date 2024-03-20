@@ -83,6 +83,7 @@ class PersonCl {
   }
 
   // this will create a method on the .prototype property not on the object itself!
+  // all methods without static keyword are instance methods and will be created in prototype and accessible from every instance
   calcAge() {
     console.log(new Date().getFullYear() - this.birthYear);
   }
@@ -111,10 +112,17 @@ class PersonCl {
   get lastName() {
     return this._lastName;
   }
+
+  static hello() {
+    console.log('Hello available only from the constructor');
+  }
 }
 
 const monica = new PersonCl('Monica', 1997);
 monica.calcAge(); // 27
+
+//monica.hello(); // cannot do that - because it is now inherited
+PersonCl.hello(); // that is the way to call static method
 
 // this will work exactly like calcAge
 PersonCl.prototype.calcAge2 = function () {
@@ -150,3 +158,19 @@ const account = {
 account.latest = 50;
 console.log(account); // [1, 2, 3, 4, 50]
 console.log(account.latest); // 50
+
+// static methods - are used only on constructor itself and are not inherited by every instance
+// eg. Number.parseFloat(), Array.from()
+
+// implement in constructor function
+
+Person.hey = function () {
+  console.log('Hey static :D');
+  console.log(this, ' points to entire constructor function');
+};
+
+// now we call it like this
+
+Person.hey();
+
+// in class declaration it is even simpler - just add static keyword before method name
