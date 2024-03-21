@@ -239,3 +239,32 @@ class StudentCl extends PersonCl {
 const jonas = new StudentCl('Jonas', 1999, 'Biology');
 console.log(jonas);
 jonas.calcAge();
+
+// Object.create to inherit from parent
+
+// const PersonProto = {
+//   calcAge() {
+//     console.log(new Date().getFullYear() - this.birthYear);
+//   },
+
+//   // this is simulating a constructor - but it is just a regular method on object literal - can be called any name
+//   init(firstName, birthYear) {
+//     this.firstName = firstName; // this is linked to a object that is calling this method - in this case to steven
+//     this.birthYear = birthYear;
+//   },
+// };
+
+const StudentProto = Object.create(PersonProto); // link StudentProto to PersonProto
+console.log(StudentProto); // empty object linked to person prototype so we can use methods on it from person proto
+
+// this overwrites init method in PersonProto
+StudentProto.init = function (firstName, birthYear, course) {
+  PersonProto.init.call(this, firstName, birthYear);
+  this.course = course;
+};
+
+const jay = Object.create(StudentProto); // now we create another empty object but now linked to StudentProto
+console.log(jay);
+jay.init('Jay', 1997, 'IT');
+console.log(jay);
+jay.calcAge(); // 27 - it works so it means it is correctly connected to Person prototype
