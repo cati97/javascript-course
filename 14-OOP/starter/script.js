@@ -33,10 +33,14 @@ console.log(arr.__proto__.__proto__.__proto__); // one more and it is null becau
 
 // I get a warning that this constructor function can be replaced with class declaration!
 // Class declaration is a new modern way of creating classes in js since ES6 and under the hood it still uses constructor functions!
-const Person = function (firstName, age) {
+const Person = function (firstName, birthYear) {
   // this is empty {} create by the new keyword, then we fill it with values
   this.firstName = firstName;
-  this.age = age;
+  this.birthYear = birthYear;
+};
+
+Person.prototype.calcAge = function () {
+  console.log(new Date().getFullYear() - this.birthYear);
 };
 
 const anna = new Person('Anna', 25);
@@ -194,3 +198,22 @@ const steven = Object.create(PersonProto); // now steven empty {} has a new prop
 console.log(steven.__proto__ === PersonProto); // true
 steven.init('Steven', 1972);
 steven.calcAge(); // 52
+
+// how to set up manually inheritance between two constructor functions
+
+const Student = function (firstName, birthYear, course) {
+  Person.call(this, firstName, birthYear); // calling parent "class" constructor - passing down correct this ref
+  this.course = course;
+};
+Student.prototype = Object.create(Person.prototype);
+
+const mike = new Student('Mike', 1997, 'IT');
+console.log(mike);
+
+Student.prototype.constructor = Student; // otherwise it would be Person constructor because of Object.create
+console.log(Student.prototype.constructor);
+mike.calcAge(); // now Student instance inherits calcAge method from the Person prototype
+
+console.log(mike instanceof Student); // true
+console.log(mike instanceof Person); // true
+console.log(mike instanceof Object); // true
