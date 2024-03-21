@@ -217,3 +217,25 @@ mike.calcAge(); // now Student instance inherits calcAge method from the Person 
 console.log(mike instanceof Student); // true
 console.log(mike instanceof Person); // true
 console.log(mike instanceof Object); // true
+
+class StudentCl extends PersonCl {
+  // if we don't add any new properties we don't need a constructor at all
+  constructor(firstName, birthYear, course) {
+    super(firstName, birthYear); // super must always be called first before setting new properties
+    this.course = course;
+  }
+
+  introduce() {
+    console.log(
+      `Hello, my name is ${this.firstName} and I study ${this.course}`
+    );
+  }
+
+  calcAge() {
+    // we can overwrite here the parent function
+  }
+}
+
+const jonas = new StudentCl('Jonas', 1999, 'Biology');
+console.log(jonas);
+jonas.calcAge();
