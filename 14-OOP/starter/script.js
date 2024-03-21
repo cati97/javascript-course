@@ -268,3 +268,55 @@ console.log(jay);
 jay.init('Jay', 1997, 'IT');
 console.log(jay);
 jay.calcAge(); // 27 - it works so it means it is correctly connected to Person prototype
+
+class Account {
+  // private properties must be declared outside of the constructor
+  #movements = []; // private class field
+  locale = navigator.language; // public class field not declared with let not const
+  #pin;
+
+  constructor(owner, currency, pin) {
+    this.owner = owner;
+    this.currency = currency;
+    this.#pin = pin; // we redeclare it here but we cannot declare class field here for the first time
+    //this._pin = pin; // imitates private property but is not private really - just a convention before private class fields were introduced
+    // this.#movements = [];
+    // this.locale = navigator.language; - it can be created as public field - because it will be added to all instances
+  }
+
+  getMovements() {
+    return this.#movements;
+  }
+
+  deposit(val) {
+    this.#movements.push(val);
+  }
+
+  withdraw(val) {
+    this.deposit(-val);
+  }
+
+  // really private method
+  #approveLoan(val) {
+    return val < 1000;
+  }
+
+  requestLoan(val) {
+    if (this.#approveLoan(val)) {
+      this.#movements.push(val);
+    }
+  }
+}
+
+const acc1 = new Account('James', 'EUR', 1111);
+// acc1.movements.push(450); we should not be able to do this
+acc1.deposit(450);
+acc1.withdraw(200);
+console.log(acc1.getMovements()); // [450, -200]
+// acc1._movements.push(200); you can still do this but at least you know you shouldn't
+// acc1.#movements.push(200); // syntax error - now we have really private field - no access is possible!
+
+acc1.requestLoan(500);
+console.log(acc1);
+
+// acc1.#approveLoan syntax error!
