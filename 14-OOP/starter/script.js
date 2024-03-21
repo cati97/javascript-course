@@ -290,10 +290,12 @@ class Account {
 
   deposit(val) {
     this.#movements.push(val);
+    return this; // it makes the method chainable
   }
 
   withdraw(val) {
     this.deposit(-val);
+    return this;
   }
 
   // really private method
@@ -303,7 +305,8 @@ class Account {
 
   requestLoan(val) {
     if (this.#approveLoan(val)) {
-      this.#movements.push(val);
+      this.deposit(val);
+      return this;
     }
   }
 }
@@ -320,3 +323,6 @@ acc1.requestLoan(500);
 console.log(acc1);
 
 // acc1.#approveLoan syntax error!
+
+acc1.deposit(300).deposit(200).withdraw(80);
+console.log(acc1);
