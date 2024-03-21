@@ -274,6 +274,7 @@ class Account {
   #movements = []; // private class field
   locale = navigator.language; // public class field not declared with let not const
   #pin;
+  static greeting = 'Hey there!';
 
   constructor(owner, currency, pin) {
     this.owner = owner;
@@ -309,6 +310,11 @@ class Account {
       return this;
     }
   }
+
+  static sayHello() {
+    console.log(this.greeting); // in static method you have access only to static properties!
+    // console.log(this.owner);
+  }
 }
 
 const acc1 = new Account('James', 'EUR', 1111);
@@ -326,3 +332,5 @@ console.log(acc1);
 
 acc1.deposit(300).deposit(200).withdraw(80);
 console.log(acc1);
+
+Account.sayHello();
