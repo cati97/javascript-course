@@ -61,11 +61,13 @@ class App {
   workouts = [];
   #map;
   #mapEvent;
+  #mapZoom = 13;
 
   constructor() {
     this._getPosition();
     form.addEventListener('submit', this._newWorkout.bind(this));
     inputType.addEventListener('change', this._toggleElevationField); // in _toggleElevationField we don't use the this keyword so no need for binding
+    containerWorkouts.addEventListener('click', this._moveToMarker.bind(this));
   }
 
   // protected method - just a convention - now we have real private class methods using #
@@ -85,7 +87,7 @@ class App {
     const coords = [latitude, longitude];
     console.log(`https://www.google.pl/maps/@${latitude},${longitude}`);
     // I can use L directly because it is a global variable in the script loaded BEFORE this one
-    this.#map = L.map('map').setView(coords, 13);
+    this.#map = L.map('map').setView(coords, this.#mapZoom);
 
     L.tileLayer('https://tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
       attribution:
@@ -203,6 +205,20 @@ class App {
       </li>
   `;
     form.insertAdjacentHTML('afterend', workoutElement);
+  }
+
+  _moveToMarker(e) {
+    const workoutEl = e.target.closest('.workout');
+    if (!workoutEl) return;
+    const workout = this.workouts.find(
+      work => work.id === workoutEl.dataset.id
+    );
+    this.#map.setView(workout.coords, this.#mapZoom, {
+      animate: true,
+      pan: {
+        duration: 1,
+      },
+    });
   }
 }
 
