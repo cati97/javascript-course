@@ -29,7 +29,7 @@ class Running extends Workout {
   }
 
   calcPace() {
-    this.pace = this.duration / this.distance;
+    this.pace = (this.duration / this.distance).toFixed(2);
     return this.pace;
   }
 }
@@ -42,7 +42,7 @@ class Cycling extends Workout {
   }
 
   calcSpeed() {
-    this.speed = this.distance / (this.duration / 60);
+    this.speed = (this.distance / (this.duration / 60)).toFixed(2);
     return this.speed;
   }
 }
@@ -104,24 +104,96 @@ class App {
     console.log(this); // without binding it would point to form HTML element - element to which addEventListener is attached to
     e.preventDefault(); // prevents reloading the page on submit
 
-    // clear all inputs
-    inputDistance.value =
-      inputDuration.value =
-      inputCadence.value =
-      inputElevation.value =
-        '';
+    const fields = [inputDistance, inputDuration];
+    inputType.value === 'running'
+      ? fields.push(inputCadence)
+      : fields.push(inputElevation);
+
+    if (fields.some(field => Number(field.value) <= 0)) {
+      alert('Please fill all the inputs with positive numbers!');
+      return;
+    }
 
     const { lat, lng } = this.#mapEvent.latlng;
-    L.marker([lat, lng])
+    const coords = [lat, lng];
+
+    const newWorkout =
+      inputType.value === 'running'
+        ? new Running(
+            coords,
+            inputDistance.value,
+            inputDuration.value,
+            inputCadence.value
+          )
+        : new Cycling(
+            coords,
+            inputDistance.value,
+            inputDuration.value,
+            inputElevation.value
+          );
+
+    this.workouts.push(newWorkout);
+    const sidebar = document.querySelector('.workouts');
+
+    const newLiElement = `
+    <li class="workout workout--${inputType.value}" data-id="${newWorkout.id}">
+    <h2 class="workout__title">${
+      inputType.value[0].toUpperCase() + inputType.value.slice(1)
+    } on ${months[newWorkout.date.getMonth()]} ${newWorkout.date.getDate()}</h2>
+    <div class="workout__details">
+      <span class="workout__icon">${
+        inputType.value === 'running' ? '🏃‍♂️' : '🚴‍♀️'
+      }</span>
+      <span class="workout__value">${inputDistance.value}</span>
+      <span class="workout__unit">km</span>
+    </div>
+    <div class="workout__details">
+      <span class="workout__icon">⏱</span>
+      <span class="workout__value">${inputDuration.value}</span>
+      <span class="workout__unit">min</span>
+    </div>
+    <div class="workout__details">
+      <span class="workout__icon">⚡️</span>
+      <span class="workout__value">${
+        inputType.value === 'running' ? newWorkout.pace : newWorkout.speed
+      }</span>
+      <span class="workout__unit">min/km</span>
+    </div>
+    <div class="workout__details">
+      <span class="workout__icon">${
+        inputType.value === 'running' ? '🦶🏼' : '⛰'
+      }</span>
+      <span class="workout__value">${
+        inputType.value === 'running'
+          ? newWorkout.cadence
+          : newWorkout.elevationGain
+      }</span>
+      <span class="workout__unit">${
+        inputType.value === 'running' ? 'spm' : 'm'
+      }</span>
+    </div>
+  </li>
+    `;
+
+    sidebar.insertAdjacentHTML('afterbegin', newLiElement);
+
+    L.marker(coords)
       .addTo(this.#map)
       .bindPopup('Workout', {
         maxWidth: 250,
         minWidth: 100,
         autoClose: false,
         closeOnClick: false,
-        className: 'running-popup',
+        className: `${inputType.value}-popup`,
       })
       .openPopup();
+
+    inputDistance.value =
+      inputDuration.value =
+      inputCadence.value =
+      inputElevation.value =
+        '';
+    form.classList.add('hidden');
   }
 }
 
