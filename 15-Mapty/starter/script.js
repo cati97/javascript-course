@@ -65,6 +65,7 @@ class App {
 
   constructor() {
     this._getPosition();
+    this._getLocalStorage();
     form.addEventListener('submit', this._newWorkout.bind(this));
     inputType.addEventListener('change', this._toggleElevationField); // in _toggleElevationField we don't use the this keyword so no need for binding
     containerWorkouts.addEventListener('click', this._moveToMarker.bind(this));
@@ -95,6 +96,7 @@ class App {
     }).addTo(this.#map);
 
     this.#map.on('click', this._showForm.bind(this));
+    this.workouts.forEach(work => this._renderWorkoutMarker(work));
   }
 
   _showForm(mapE) {
@@ -156,6 +158,7 @@ class App {
     this._renderWorkoutInList(newWorkout);
     this._renderWorkoutMarker(newWorkout);
     this._hideForm();
+    this._setLocalStorage();
   }
 
   _renderWorkoutMarker(workout) {
@@ -219,6 +222,37 @@ class App {
         duration: 1,
       },
     });
+  }
+
+  _setLocalStorage() {
+    localStorage.setItem('workouts', JSON.stringify(this.workouts));
+  }
+
+  _getLocalStorage() {
+    const data = JSON.parse(localStorage.getItem('workouts'));
+    // as we restore it from local storage we loose the prototype chain - proto is now only Object
+    // now we cannot use inherited methods
+
+    if (!data) return;
+    // this.workouts = data; - this will have lost prototype chain
+
+    // we can fix this by creating objects again using classes
+    this.workouts = data.map(work => {
+      const { coords, distance, duration, cadence, elevationGain } = work;
+      const workout =
+        work.type === 'running'
+          ? new Running(coords, distance, duration, cadence)
+          : new Cycling(coords, distance, duration, elevationGain);
+      return workout;
+    });
+
+    this.workouts.forEach(work => this._renderWorkoutInList(work));
+    // this.workouts.forEach(work => this._renderWorkoutMarker(work)); cannot do that here as the map doesn't exist yet
+  }
+
+  clearLocalStorage() {
+    localStorage.removeItem('workouts');
+    location.reload(); // reload the page
   }
 }
 
