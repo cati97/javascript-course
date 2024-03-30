@@ -54,3 +54,7 @@ const getAndRenderCountryByName = name => {
 };
 
 getAndRenderCountryByName('portugal');
+
+fetch(`https://restcountries.com/v3.1/name/portugal`)
+  .then(response => response.json())
+  .then(data => console.log(data));
