@@ -40,13 +40,14 @@ const getAndRenderCountryByName = name => {
     renderCountry(country);
 
     const neighbors = country.borders;
+    if (!neighbors.length) return; // exist if country has no neighbors
     const req = new XMLHttpRequest();
     req.open('GET', `https://restcountries.com/v3.1/alpha/${neighbors[0]}`);
     req.send();
 
+    // this creates a callback loop - one callback nested into another one
     req.addEventListener('load', function () {
       const [country] = JSON.parse(this.responseText);
-      if (!country) return;
       renderCountry(country, 'neighbour');
     });
   });
