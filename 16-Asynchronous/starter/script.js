@@ -92,6 +92,6 @@ const getAndRenderCountryByName2 = name => {
     });
 };
 
-btn.addEventListener('click', () => {
-  getAndRenderCountryByName2('portugal');
-});
+// btn.addEventListener('click', () => {
+//   getAndRenderCountryByName2('portugal');
+// });
