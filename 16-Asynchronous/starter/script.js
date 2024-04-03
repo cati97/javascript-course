@@ -59,17 +59,27 @@ const getAndRenderCountryByName = name => {
 
 // getAndRenderCountryByName('portugal');
 
+const getJSON = (url, errorMsg = 'Something went wrong') => {
+  return fetch(url).then(response => {
+    if (!response.ok) {
+      throw new Error(`${errorMsg} (${response.status})`);
+    }
+    return response.json();
+  });
+};
+
 const getAndRenderCountryByName2 = name => {
-  fetch(`https://restcountries.com/v3.1/name/${name}`)
+  getJSON(`https://restcountries.com/v3.1/name/${name}`, 'Country not found!')
     // .then(response => response.json(), (err) => console.error(err)) - instead of catch we can also put error handling callback as second arg
-    .then(response => response.json())
     .then(data => {
       renderCountry(data[0]);
-      const neighbors = data[0].borders;
-      if (!neighbors.length) return;
-      return fetch(`https://restcountries.com/v3.1/alpha/${neighbors[0]}`);
+      const neighbors = data[0]?.borders;
+      if (!neighbors?.length) throw new Error('No neighbor found!'); // when I explicity throw new Error in then block - the promise will get rejected and enter catch block
+      return getJSON(
+        `https://restcountries.com/v3.1/alpha/${neighbors[0]}`,
+        'Country not found!'
+      );
     })
-    .then(response => response.json())
     .then(data => renderCountry(data[0], 'neighbour'))
     .catch(err => {
       // catch only enters when there is no internet connection - other error codes (500, 404) we need to handle differently in then block
