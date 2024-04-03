@@ -53,8 +53,19 @@ const getAndRenderCountryByName = name => {
   });
 };
 
-getAndRenderCountryByName('portugal');
+// getAndRenderCountryByName('portugal');
 
-fetch(`https://restcountries.com/v3.1/name/portugal`)
-  .then(response => response.json())
-  .then(data => console.log(data));
+const getAndRenderCountryByName2 = name => {
+  fetch(`https://restcountries.com/v3.1/name/${name}`)
+    .then(response => response.json())
+    .then(data => {
+      renderCountry(data[0]);
+      const neighbors = data[0].borders;
+      if (!neighbors.length) return;
+      return fetch(`https://restcountries.com/v3.1/alpha/${neighbors[0]}`);
+    })
+    .then(response => response.json())
+    .then(data => renderCountry(data[0], 'neighbour'));
+};
+
+getAndRenderCountryByName2('portugal');
