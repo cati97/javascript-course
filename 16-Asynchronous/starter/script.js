@@ -5,6 +5,10 @@ const countriesContainer = document.querySelector('.countries');
 
 ///////////////////////////////////////
 
+const renderMsg = msg => {
+  countriesContainer.insertAdjacentText('beforeend', msg);
+};
+
 const renderCountry = (country, className) => {
   const countryEl = `
     <article class="country ${className}">
@@ -27,7 +31,7 @@ const renderCountry = (country, className) => {
     </article>
   `;
   countriesContainer.insertAdjacentHTML('beforeend', countryEl);
-  countriesContainer.style.opacity = 1;
+  // countriesContainer.style.opacity = 1;
 };
 
 const getAndRenderCountryByName = name => {
@@ -57,6 +61,7 @@ const getAndRenderCountryByName = name => {
 
 const getAndRenderCountryByName2 = name => {
   fetch(`https://restcountries.com/v3.1/name/${name}`)
+    // .then(response => response.json(), (err) => console.error(err)) - instead of catch we can also put error handling callback as second arg
     .then(response => response.json())
     .then(data => {
       renderCountry(data[0]);
@@ -65,7 +70,18 @@ const getAndRenderCountryByName2 = name => {
       return fetch(`https://restcountries.com/v3.1/alpha/${neighbors[0]}`);
     })
     .then(response => response.json())
-    .then(data => renderCountry(data[0], 'neighbour'));
+    .then(data => renderCountry(data[0], 'neighbour'))
+    .catch(err => {
+      // catch only enters when there is no internet connection - other error codes (500, 404) we need to handle differently in then block
+      console.error(err);
+      renderMsg(`Something went wrong - ${err.message}`);
+    })
+    .finally(() => {
+      countriesContainer.style.opacity = 1; // in finally we will enter no matter of the promise result success or error
+      // good real use case for hiding the loading spinner
+    });
 };
 
-getAndRenderCountryByName2('portugal');
+btn.addEventListener('click', () => {
+  getAndRenderCountryByName2('portugal');
+});
