@@ -37,7 +37,12 @@ const whereAmI = (lat, lng) => {
     .finally(() => (countriesContainer.style.opacity = 1));
 };
 
-navigator.geolocation.getCurrentPosition((position) => {
+// navigator.geolocation.getCurrentPosition((position) => {
+//   const { latitude: lat, longitude: lng } = position.coords;
+//   whereAmI(lat, lng);
+// });
+
+getGeolocation().then((position) => {
   const { latitude: lat, longitude: lng } = position.coords;
   whereAmI(lat, lng);
 });

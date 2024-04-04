@@ -138,3 +138,23 @@ wait(3)
 
 Promise.resolve('Success').then(res => console.log(res));
 Promise.reject(new Error('Problem!')).catch(err => console.error(err));
+
+// promisifying geolocation
+// navigator.geolocation.getCurrentPosition(
+//   position => console.log(position),
+//   err => console.error(err)
+// );
+
+const getGeolocation = () => {
+  return new Promise((resolve, reject) => {
+    // navigator.geolocation.getCurrentPosition(
+    //   position => resolve(position),
+    //   err => reject(err)
+    // );
+    navigator.geolocation.getCurrentPosition(resolve, reject); // position and error are passed automatically
+  });
+};
+
+getGeolocation()
+  .then(pos => console.log(pos))
+  .catch(err => console.error(err));
