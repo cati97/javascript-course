@@ -95,3 +95,11 @@ const getAndRenderCountryByName2 = name => {
 // btn.addEventListener('click', () => {
 //   getAndRenderCountryByName2('portugal');
 // });
+
+// how async works behind the scenes?
+// what will be logged first?
+
+console.log('Test start'); // 1
+setTimeout(() => console.log('Timeout after 0 seconds'), 0); // 4 - as the last one because it was held and waited in the callback queue - this timer is not a guarantee!
+Promise.resolve('Promise resolved').then(res => console.log(res)); // 3 - because Promises have micro tasks queue which has a higher priority than regular callback
+console.log('Test end'); // 2 - because the first priority is anything in global context then callbacks
