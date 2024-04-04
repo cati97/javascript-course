@@ -103,3 +103,38 @@ console.log('Test start'); // 1
 setTimeout(() => console.log('Timeout after 0 seconds'), 0); // 4 - as the last one because it was held and waited in the callback queue - this timer is not a guarantee!
 Promise.resolve('Promise resolved').then(res => console.log(res)); // 3 - because Promises have micro tasks queue which has a higher priority than regular callback
 console.log('Test end'); // 2 - because the first priority is anything in global context then callbacks
+
+// how to create our own Promise
+
+const lotteryPromise = new Promise((resolve, reject) => {
+  console.log('Lottery draw');
+  setTimeout(() => {
+    if (Math.random() >= 0.5) {
+      resolve('You win!');
+    } else {
+      reject('You lose!');
+    }
+  }, 2000);
+});
+
+lotteryPromise.then(res => console.log(res)).catch(err => console.error(err));
+
+// promisify the callback functions e.g. setTimeout
+
+const wait = seconds => {
+  return new Promise(resolve => {
+    setTimeout(resolve, seconds * 1000);
+  });
+};
+
+wait(3)
+  .then(() => {
+    console.log('Waited 3 seconds');
+    return wait(4);
+  })
+  .then(() => console.log('Waited 4 seconds'));
+
+// immediately resolve or reject promises - these are microtasks so they run first
+
+Promise.resolve('Success').then(res => console.log(res));
+Promise.reject(new Error('Problem!')).catch(err => console.error(err));
