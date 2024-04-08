@@ -7,6 +7,7 @@ const countriesContainer = document.querySelector('.countries');
 
 const renderMsg = msg => {
   countriesContainer.insertAdjacentText('beforeend', msg);
+  countriesContainer.style.opacity = 1;
 };
 
 const renderCountry = (country, className) => {
@@ -117,7 +118,7 @@ const lotteryPromise = new Promise((resolve, reject) => {
   }, 2000);
 });
 
-lotteryPromise.then(res => console.log(res)).catch(err => console.error(err));
+// lotteryPromise.then(res => console.log(res)).catch(err => console.error(err));
 
 // promisify the callback functions e.g. setTimeout
 
@@ -127,12 +128,12 @@ const wait = seconds => {
   });
 };
 
-wait(3)
-  .then(() => {
-    console.log('Waited 3 seconds');
-    return wait(4);
-  })
-  .then(() => console.log('Waited 4 seconds'));
+// wait(3)
+//   .then(() => {
+//     console.log('Waited 3 seconds');
+//     return wait(4);
+//   })
+//   .then(() => console.log('Waited 4 seconds'));
 
 // immediately resolve or reject promises - these are microtasks so they run first
 
@@ -160,17 +161,44 @@ getGeolocation()
   .catch(err => console.error(err));
 
 const whereAmI = async () => {
-  const position = await getGeolocation();
-  const { latitude: lat, longitude: lng } = position.coords;
-  const reversedGeo = await fetch(
-    `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}&localityLanguage=en`
-  );
-  const dataGeo = await reversedGeo.json();
-  const res = await fetch(
-    `https://restcountries.com/v3.1/name/${dataGeo.countryName}`
-  );
-  const data = await res.json();
-  renderCountry(data[0]);
+  try {
+    const position = await getGeolocation();
+    const { latitude: lat, longitude: lng } = position.coords;
+    const resGeo = await fetch(
+      `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}&localityLanguage=en`
+    );
+    if (!resGeo.ok) throw new Error('Problem getting reversed location!');
+
+    const dataGeo = await resGeo.json();
+    const res = await fetch(
+      `https://restcountries.com/v3.1/name/${dataGeo.countryName}`
+    );
+    if (!res.ok) throw new Error('Problem getting country by name!');
+    const data = await res.json();
+    renderCountry(data[0]);
+    return `You live in ${dataGeo.city} city.`;
+  } catch (err) {
+    renderMsg(err.message);
+    throw err; // propagating the error down - otherwise returned Promise will always be fulfilled
+  }
 };
 
-whereAmI();
+whereAmI()
+  .then(res => console.log(res))
+  .catch(err => console.error(err))
+  .finally(() => console.log('Finished fetching'))(
+  // how to not create a separate function variable when needing to call await - ONLY possible inside of async function
+
+  // IIFE immediately invoked function expression
+  async () => {
+    try {
+      const city = await whereAmI();
+      console.log(city);
+    } catch (err) {
+      console.error(er);
+    } finally {
+      console.log('Finished fetching');
+    }
+    // console.log('Finished fetching'); // or simply put outside of the try block - to execute always
+  }
+)();
