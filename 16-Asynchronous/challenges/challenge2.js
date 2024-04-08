@@ -28,30 +28,32 @@ Set the network speed to 'Fast 3G' in the dev tools Network tab, otherwise image
 GOOD LUCK 😀
 */
 
+const imgContainer = document.querySelector(".images");
+
 const createImage = (imgPath) => {
   return new Promise((resolve, reject) => {
     const newImg = document.createElement("img");
     newImg.src = imgPath;
     newImg.addEventListener("load", () => {
-      document.querySelector(".images").appendChild(newImg);
+      imgContainer.append(newImg);
       resolve(newImg);
     });
     newImg.addEventListener("error", () => {
-      reject("Error loading the image");
+      reject(new Error("Error loading the image"));
     });
   });
 };
 
 let currImg;
 
-createImage("../starter/img/img-1.jpg")
+createImage("img/img-1.jpg")
   .then((res) => {
     currImg = res;
     return wait(2);
   })
   .then(() => {
     currImg.style.display = "none";
-    return createImage("../starter/img/img-2.jpg");
+    return createImage("img/img-2.jpg");
   })
   .then((res) => {
     currImg = res;
