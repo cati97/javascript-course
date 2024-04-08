@@ -31,7 +31,7 @@ const renderCountry = (country, className) => {
     </article>
   `;
   countriesContainer.insertAdjacentHTML('beforeend', countryEl);
-  // countriesContainer.style.opacity = 1;
+  countriesContainer.style.opacity = 1;
 };
 
 const getAndRenderCountryByName = name => {
@@ -158,3 +158,19 @@ const getGeolocation = () => {
 getGeolocation()
   .then(pos => console.log(pos))
   .catch(err => console.error(err));
+
+const whereAmI = async () => {
+  const position = await getGeolocation();
+  const { latitude: lat, longitude: lng } = position.coords;
+  const reversedGeo = await fetch(
+    `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}&localityLanguage=en`
+  );
+  const dataGeo = await reversedGeo.json();
+  const res = await fetch(
+    `https://restcountries.com/v3.1/name/${dataGeo.countryName}`
+  );
+  const data = await res.json();
+  renderCountry(data[0]);
+};
+
+whereAmI();
