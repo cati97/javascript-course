@@ -186,19 +186,40 @@ const whereAmI = async () => {
 whereAmI()
   .then(res => console.log(res))
   .catch(err => console.error(err))
-  .finally(() => console.log('Finished fetching'))(
-  // how to not create a separate function variable when needing to call await - ONLY possible inside of async function
+  .finally(() => console.log('Finished fetching'));
+// how to not create a separate function variable when needing to call await - ONLY possible inside of async function
 
-  // IIFE immediately invoked function expression
-  async () => {
-    try {
-      const city = await whereAmI();
-      console.log(city);
-    } catch (err) {
-      console.error(er);
-    } finally {
-      console.log('Finished fetching');
-    }
-    // console.log('Finished fetching'); // or simply put outside of the try block - to execute always
+// IIFE immediately invoked function expression
+
+(async () => {
+  try {
+    const city = await whereAmI();
+    console.log(city);
+  } catch (err) {
+    console.error(er);
+  } finally {
+    console.log('Finished fetching');
   }
-)();
+  // console.log('Finished fetching'); // or simply put outside of the try block - to execute always
+})();
+
+const get3Countries = async (c1, c2, c3) => {
+  try {
+    // const [data1] = await getJSON(`https://restcountries.com/v3.1/name/${c1}`);
+    // const [data2] = await getJSON(`https://restcountries.com/v3.1/name/${c2}`);
+    // const [data3] = await getJSON(`https://restcountries.com/v3.1/name/${c3}`);
+    // console.log([data1.capital[0], data2.capital[0], data3.capital[0]]);
+    // if the next fetch doesn't depend on the first one - the best way is to fetch all in parallel - improved performance
+    // it is called a Promise Combinator
+    const data = await Promise.all([
+      getJSON(`https://restcountries.com/v3.1/name/${c1}`),
+      getJSON(`https://restcountries.com/v3.1/name/${c2}`),
+      getJSON(`https://restcountries.com/v3.1/name/${c3}`),
+    ]); // if at least one promise rejects - all reject
+    console.log(data.map(d => d[0].capital[0]));
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+get3Countries('portugal', 'poland', 'spain');
