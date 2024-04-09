@@ -223,3 +223,39 @@ const get3Countries = async (c1, c2, c3) => {
 };
 
 get3Countries('portugal', 'poland', 'spain');
+
+// returns the fastest promise with a settled state - either fulfilled or rejected
+Promise.race([
+  getJSON(`https://restcountries.com/v3.1/name/italy`),
+  getJSON(`https://restcountries.com/v3.1/name/spain`),
+  getJSON(`https://restcountries.com/v3.1/name/portugal`),
+]).then(res => console.log(res));
+
+// returns the array of all promises will the results - also fulfilled or rejected - so settled
+Promise.allSettled([
+  getJSON(`https://restcountries.com/v3.1/name/italy`),
+  getJSON(`https://restcountries.com/v3.1/name/spain`),
+  getJSON(`https://restcountries.com/v3.1/name/portugal`),
+]).then(res => console.log(res));
+
+// returns the first fulfilled promise
+Promise.any([
+  getJSON(`https://restcountries.com/v3.1/name/italy`),
+  getJSON(`https://restcountries.com/v3.1/name/spain`),
+  getJSON(`https://restcountries.com/v3.1/name/portugal`),
+]).then(res => console.log(res));
+
+const timeout = sec => {
+  return new Promise((_, reject) => {
+    setTimeout(() => {
+      reject(new Error('Request took too long!'));
+    }, sec * 1000);
+  });
+};
+
+Promise.race([
+  getJSON(`https://restcountries.com/v3.1/name/italy`),
+  timeout(0.01),
+])
+  .then(res => console.log(res))
+  .catch(err => console.error(err)); // Error: Request took too long! - if timeout takes faster than the other getJSON request
