@@ -44,22 +44,22 @@ const createImage = (imgPath) => {
   });
 };
 
-let currImg;
+// let currImg;
 
-createImage("img/img-1.jpg")
-  .then((res) => {
-    currImg = res;
-    return wait(2);
-  })
-  .then(() => {
-    currImg.style.display = "none";
-    return createImage("img/img-2.jpg");
-  })
-  .then((res) => {
-    currImg = res;
-    return wait(2);
-  })
-  .then(() => {
-    currImg.style.display = "none";
-  })
-  .catch((err) => console.error(err));
+// createImage("img/img-1.jpg")
+//   .then((res) => {
+//     currImg = res;
+//     return wait(2);
+//   })
+//   .then(() => {
+//     currImg.style.display = "none";
+//     return createImage("img/img-2.jpg");
+//   })
+//   .then((res) => {
+//     currImg = res;
+//     return wait(2);
+//   })
+//   .then(() => {
+//     currImg.style.display = "none";
+//   })
+//   .catch((err) => console.error(err));
